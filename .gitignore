@@ -1,0 +1,8 @@
+*
+
+!.gitignore
+!*.cpp
+!*.hpp
+!*.tsp
+!*.json
+!*.py
