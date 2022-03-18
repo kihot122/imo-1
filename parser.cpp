@@ -49,7 +49,17 @@ void WritePos(const std::vector<std::tuple<int, int>> &Vec, const std::string &F
 {
 	std::fstream Stream(Filename, std::ios::out);
 	for (auto &[X, Y] : Vec)
-		Stream << X << "\t" << Y << std::endl;
+		Stream << X << " " << Y << std::endl;
 
-	// Stream << std::format("{}\t{}\n", X, Y) std::format in GCC when?
+	// Stream << std::format("{} {}\n", X, Y) std::format in GCC when?
+}
+
+void WriteChain(const std::vector<int> &Cycles, const std::vector<std::tuple<int, int>> &Positions, const std::string &Filename)
+{
+	std::vector<std::tuple<int, int>> Vec;
+
+	for (int Index : Cycles)
+		Vec.push_back(Positions[Index]);
+
+	WritePos(Vec, Filename);
 }
