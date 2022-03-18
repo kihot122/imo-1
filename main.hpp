@@ -12,3 +12,5 @@ void WriteChain(const std::vector<int> &Cycles, const std::vector<std::tuple<int
 std::vector<int> Alg1(std::vector<std::vector<int>> Matrix);
 std::vector<int> Alg2(std::vector<std::vector<int>> Matrix);
 std::vector<int> Alg3(std::vector<std::vector<int>> Matrix);
+
+std::vector<int> Alg1(std::vector<std::vector<int>> &Matrix, int cycle1Start, int cycle2Start);
