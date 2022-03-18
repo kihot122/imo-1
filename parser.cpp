@@ -1,6 +1,6 @@
 #include <cmath>
 #include <fstream>
-#include "parser.hpp"
+#include "main.hpp"
 
 std::vector<std::vector<int>> ReadMat(const std::string &Filename)
 {
