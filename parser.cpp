@@ -2,7 +2,7 @@
 #include <fstream>
 #include "parser.hpp"
 
-std::vector<std::vector<int>> ReadMat(std::string Filename)
+std::vector<std::vector<int>> ReadMat(const std::string &Filename)
 {
 	auto &&Positions = ReadPos(Filename);
 	std::vector<std::vector<int>> Matrix;
@@ -19,7 +19,7 @@ std::vector<std::vector<int>> ReadMat(std::string Filename)
 	return Matrix;
 }
 
-std::vector<std::tuple<int, int>> ReadPos(std::string Filename)
+std::vector<std::tuple<int, int>> ReadPos(const std::string &Filename)
 {
 	std::fstream Stream(Filename, std::ios::in);
 	std::string Token;
@@ -43,4 +43,13 @@ std::vector<std::tuple<int, int>> ReadPos(std::string Filename)
 	}
 
 	return Positions;
+}
+
+void WritePos(const std::vector<std::tuple<int, int>> &Vec, const std::string &Filename)
+{
+	std::fstream Stream(Filename, std::ios::out);
+	for (auto &[X, Y] : Vec)
+		Stream << X << "\t" << Y << std::endl;
+
+	// Stream << std::format("{}\t{}\n", X, Y) std::format in GCC when?
 }
