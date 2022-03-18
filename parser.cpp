@@ -1,11 +1,22 @@
+#include <cmath>
 #include <fstream>
 #include "parser.hpp"
 
 std::vector<std::vector<int>> ReadMat(std::string Filename)
 {
 	auto &&Positions = ReadPos(Filename);
+	std::vector<std::vector<int>> Matrix;
+	for (auto &X1 : Positions)
+	{
+		std::vector<int> Temp;
+		for (auto &X2 : Positions)
+		{
+			Temp.push_back(static_cast<int>(std::sqrt(std::pow(std::get<0>(X1) - std::get<0>(X2), 2) + std::pow(std::get<1>(X1) - std::get<1>(X2), 2))));
+		}
+		Matrix.push_back(Temp);
+	}
 
-	return std::vector<std::vector<int>>();
+	return Matrix;
 }
 
 std::vector<std::tuple<int, int>> ReadPos(std::string Filename)
