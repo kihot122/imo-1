@@ -60,6 +60,6 @@ int main(int argc, char **argv)
 
 	std::fstream File("Results.txt", std::ios::out);
 	File << Max1 << " " << Max2 << " " << Max3 << std::endl;
-	File << Min1 << " " << Min1 << " " << Min1 << std::endl;
-	File << Avg1 << " " << Avg1 << " " << Avg1 << std::endl;
+	File << Min1 << " " << Min2 << " " << Min3 << std::endl;
+	File << Avg1 << " " << Avg2 << " " << Avg3 << std::endl;
 }
