@@ -30,7 +30,7 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
 		std::vector<std::array<int, 2>> Deltas;
 		std::vector<int> Indices;
 
-		int WorstRegret = -1;
+		int LeastRegret = 0x0fffffff;
 		int BestDelta = 0x0fffffff;
 		int SelectedIndex = -1;
 
@@ -63,13 +63,13 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
 			for (size_t i = 0; i < Deltas.size(); i++)
 			{
 				int Regret = Deltas[i][1] - Deltas[i][0];
-				if (Regret > WorstRegret)
+				if (Regret < LeastRegret)
 				{
-					WorstRegret = Regret;
+					LeastRegret = Regret;
 					SelectedIndex = Indices[i];
 					BestDelta = Deltas[i][0];
 				}
-				else if (Regret == WorstRegret and Deltas[i][0] < BestDelta)
+				else if (Regret == LeastRegret and Deltas[i][0] < BestDelta)
 				{
 					BestDelta = Deltas[i][0];
 					SelectedIndex = Indices[i];
@@ -107,12 +107,12 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
 			for (size_t i = 0; i < Deltas.size(); i++)
 			{
 				int Regret = Deltas[i][1] - Deltas[i][0];
-				if (Regret > WorstRegret)
+				if (Regret < LeastRegret)
 				{
-					WorstRegret = Regret;
+					LeastRegret = Regret;
 					SelectedIndex = Indices[i];
 				}
-				else if (Regret == WorstRegret and Deltas[i][0] < BestDelta)
+				else if (Regret == LeastRegret and Deltas[i][0] < BestDelta)
 				{
 					BestDelta = Deltas[i][0];
 					SelectedIndex = Indices[i];
