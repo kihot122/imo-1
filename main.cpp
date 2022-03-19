@@ -42,17 +42,17 @@ int main(int argc, char **argv)
 		}
 	}
 
-	int Max1 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[0] > b[0]; }))[0];
-	int Max2 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[1] > b[1]; }))[1];
-	int Max3 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[2] > b[2]; }))[2];
+	int Max1 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[0] < b[0]; }))[0];
+	int Max2 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[1] < b[1]; }))[1];
+	int Max3 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[2] < b[2]; }))[2];
 
 	int Min1 = (*std::min_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[0] < b[0]; }))[0];
 	int Min2 = (*std::min_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[1] < b[1]; }))[1];
 	int Min3 = (*std::min_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[2] < b[2]; }))[2];
 
-	int Avg1 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &a, auto &b) { return a[0]; }) / 100;
-	int Avg2 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &a, auto &b) { return a[1]; }) / 100;
-	int Avg3 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &a, auto &b) { return a[3]; }) / 100;
+	int Avg1 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &acc, auto &ref) { return acc + ref[0]; }) / 100;
+	int Avg2 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &acc, auto &ref) { return acc + ref[1]; }) / 100;
+	int Avg3 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &acc, auto &ref) { return acc + ref[2]; }) / 100;
 
 	WriteChain(BestChain[0], Positions, "Alg1.txt");
 	WriteChain(BestChain[1], Positions, "Alg2.txt");
