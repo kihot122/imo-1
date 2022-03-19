@@ -1,16 +1,16 @@
-#include <vector>
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 std::vector<int> Alg1(std::vector<std::vector<int>> &matrix) 
 {
-    int pointsCount = matrix.size();
+	int pointsCount = matrix.size();
 
-    std::vector<bool> left (pointsCount, true);
-    int assigned = 0;
+	std::vector<bool> left(pointsCount, true);
+	int assigned = 0;
 
-    std::vector<int> cycle[2];
+	std::vector<int> cycle[2];
 
     srand (time(NULL));
     int cycle1Start = rand() % pointsCount;
@@ -37,8 +37,8 @@ std::vector<int> Alg1(std::vector<std::vector<int>> &matrix)
     left[cycle2Start] = false;
     assigned = 2;
 
-    cycle[0].push_back(cycle1Start);
-    cycle[1].push_back(cycle2Start);
+	cycle[0].push_back(cycle1Start);
+	cycle[1].push_back(cycle2Start);
 
     int closestId;
     int cycleIndex;
@@ -65,12 +65,11 @@ std::vector<int> Alg1(std::vector<std::vector<int>> &matrix)
             }
         }
 
-        left[closestId] = false;
-        cycle[cycleIndex].push_back(closestId);
-        assigned++;
+		left[closestId] = false;
+		cycle[cycleIndex].push_back(closestId);
+		assigned++;
+	}
 
-    } 
-
-    cycle[0].insert( cycle[0].end(), cycle[1].begin(), cycle[1].end());
-    return cycle[0];
+	cycle[0].insert(cycle[0].end(), cycle[1].begin(), cycle[1].end());
+	return cycle[0];
 }
