@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <deque>
 #include <random>
 #include <set>
 #include "main.hpp"
@@ -16,18 +17,25 @@ std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode)
 
 	int PivotA = StartNode == -1 ? Dist(Engine) : StartNode;
 	int PivotB = std::distance(Matrix[PivotA].begin(), std::max_element(Matrix[PivotA].begin(), Matrix[PivotA].end()));
-	int SecondA = std::distance(Matrix[PivotA].begin(), std::min_element(Matrix[PivotA].begin(), Matrix[PivotA].end(), [&](auto &a, auto &b) { return a == 0 ? false : a < b; }));
-	int SecondB = std::distance(Matrix[PivotB].begin(), std::min_element(Matrix[PivotB].begin(), Matrix[PivotB].end(), [&](auto &a, auto &b) { return a == 0 ? false : a < b; }));
 
-	std::vector<int> CycleA{PivotA, SecondA}, CycleB{PivotB, SecondB};
+	for (auto &Row : Matrix)
+		for (auto &Col : Row)
+			if (Col == 0)
+				Col = 0x0fffffff;
+
+	int SecondA = std::distance(Matrix[PivotA].begin(), std::min_element(Matrix[PivotA].begin(), Matrix[PivotA].end()));
+	int SecondB = std::distance(Matrix[PivotB].begin(), std::min_element(Matrix[PivotB].begin(), Matrix[PivotB].end()));
+
+	std::deque<int> CycleA{PivotA, SecondA}, CycleB{PivotB, SecondB};
 	for (auto Index : {PivotA, SecondA, PivotB, SecondB})
 		AvailableNodes.erase(Index);
 
 	bool Flag = true;
 	while (not AvailableNodes.empty())
 	{
-		int Best = 0x0fffffff;
-		int BestIndex = -1;
+		int BestDelta = 0x0fffffff;
+		int BestNode = -1;
+		int BestPlace = -1;
 		int Delta = 0;
 
 		if (Flag)
@@ -37,14 +45,15 @@ std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode)
 				for (auto Candidate : AvailableNodes)
 				{
 					Delta = Matrix[CycleA[i]][Candidate] + Matrix[Candidate][CycleA[(i + 1) % CycleA.size()]] - Matrix[CycleA[i]][CycleA[(i + 1) % CycleA.size()]];
-					if (Delta < Best)
+					if (Delta < BestDelta)
 					{
-						Best = Delta;
-						BestIndex = Candidate;
+						BestDelta = Delta;
+						BestNode = Candidate;
+						BestPlace = i;
 					}
 				}
 			}
-			CycleA.push_back(BestIndex);
+			CycleA.insert(CycleA.begin() + BestPlace + 1, BestNode);
 		}
 		else
 		{
@@ -53,20 +62,21 @@ std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode)
 				for (auto Candidate : AvailableNodes)
 				{
 					Delta = Matrix[CycleB[i]][Candidate] + Matrix[Candidate][CycleB[(i + 1) % CycleB.size()]] - Matrix[CycleB[i]][CycleB[(i + 1) % CycleB.size()]];
-					if (Delta < Best)
+					if (Delta < BestDelta)
 					{
-						Best = Delta;
-						BestIndex = Candidate;
+						BestDelta = Delta;
+						BestNode = Candidate;
+						BestPlace = i;
 					}
 				}
 			}
-			CycleB.push_back(BestIndex);
+			CycleB.insert(CycleB.begin() + BestPlace + 1, BestNode);
 		}
 
-		AvailableNodes.erase(BestIndex);
+		AvailableNodes.erase(BestNode);
 		Flag = not Flag;
 	}
 
 	CycleA.insert(CycleA.end(), CycleB.begin(), CycleB.end());
-	return CycleA;
+	return std::vector<int>(CycleA.begin(), CycleA.end());
 }
