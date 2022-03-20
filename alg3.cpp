@@ -4,7 +4,7 @@
 #include <set>
 #include "main.hpp"
 
-std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
+std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode)
 {
 	std::random_device Rand;
 
@@ -15,7 +15,7 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
 	for (int i = 0; i < Matrix.size(); i++)
 		AvailableNodes.insert(i);
 
-	int PivotA = Dist(Engine);
+	int PivotA = StartNode == -1 ? Dist(Engine) : StartNode;
 	int PivotB = std::distance(Matrix[PivotA].begin(), std::max_element(Matrix[PivotA].begin(), Matrix[PivotA].end()));
 	int SecondA = std::distance(Matrix[PivotA].begin(), std::min_element(Matrix[PivotA].begin(), Matrix[PivotA].end(), [&](auto &a, auto &b) { return a == 0 ? false : a < b; }));
 	int SecondB = std::distance(Matrix[PivotB].begin(), std::min_element(Matrix[PivotB].begin(), Matrix[PivotB].end(), [&](auto &a, auto &b) { return a == 0 ? false : a < b; }));
@@ -30,7 +30,7 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
 		std::vector<std::array<int, 2>> Deltas;
 		std::vector<int> Indices;
 
-		int LeastRegret = 0x0fffffff;
+		int WorstRegret = -1;
 		int BestDelta = 0x0fffffff;
 		int SelectedIndex = -1;
 
@@ -63,13 +63,13 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
 			for (size_t i = 0; i < Deltas.size(); i++)
 			{
 				int Regret = Deltas[i][1] - Deltas[i][0];
-				if (Regret < LeastRegret)
+				if (Regret > WorstRegret)
 				{
-					LeastRegret = Regret;
+					WorstRegret = Regret;
 					SelectedIndex = Indices[i];
 					BestDelta = Deltas[i][0];
 				}
-				else if (Regret == LeastRegret and Deltas[i][0] < BestDelta)
+				else if (Regret == WorstRegret and Deltas[i][0] < BestDelta)
 				{
 					BestDelta = Deltas[i][0];
 					SelectedIndex = Indices[i];
@@ -107,12 +107,12 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix)
 			for (size_t i = 0; i < Deltas.size(); i++)
 			{
 				int Regret = Deltas[i][1] - Deltas[i][0];
-				if (Regret < LeastRegret)
+				if (Regret > WorstRegret)
 				{
-					LeastRegret = Regret;
+					WorstRegret = Regret;
 					SelectedIndex = Indices[i];
 				}
-				else if (Regret == LeastRegret and Deltas[i][0] < BestDelta)
+				else if (Regret == WorstRegret and Deltas[i][0] < BestDelta)
 				{
 					BestDelta = Deltas[i][0];
 					SelectedIndex = Indices[i];

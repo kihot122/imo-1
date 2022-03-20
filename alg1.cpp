@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-std::vector<int> Alg1(std::vector<std::vector<int>> matrix)
+std::vector<int> Alg1(std::vector<std::vector<int>> matrix, int startnode)
 {
 	int pointsCount = matrix.size();
 
@@ -14,7 +14,7 @@ std::vector<int> Alg1(std::vector<std::vector<int>> matrix)
 	std::vector<int> cycle[2];
 
 	srand(time(NULL));
-	int cycle1Start = rand() % pointsCount;
+	int cycle1Start = startnode == -1 ? rand() % pointsCount : startnode;
 	left[cycle1Start] = false;
 	int cycle2Start = pointsCount;
 

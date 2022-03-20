@@ -6,8 +6,8 @@
 
 int main(int argc, char **argv)
 {
-	auto Matrix = ReadMat("kroA100.tsp");
-	auto Positions = ReadPos("kroA100.tsp");
+	auto Matrix = ReadMat(argc == 2 ? argv[1] : "kroA100.tsp");
+	auto Positions = ReadPos(argc == 2 ? argv[1] : "kroA100.tsp");
 
 	std::array<std::array<int, 3>, 100> Results;
 	std::array<int, 3> BestLength{0x0fffffff, 0x0fffffff, 0x0fffffff};
@@ -15,9 +15,9 @@ int main(int argc, char **argv)
 
 	for (size_t i = 0; i < 100; i++)
 	{
-		const auto &Chain1 = Alg1(Matrix);
-		const auto &Chain2 = Alg2(Matrix);
-		const auto &Chain3 = Alg3(Matrix);
+		const auto &Chain1 = Alg1(Matrix, i);
+		const auto &Chain2 = Alg2(Matrix, i);
+		const auto &Chain3 = Alg3(Matrix, i);
 
 		int Length1 = ChainLength(Chain1, Matrix);
 		int Length2 = ChainLength(Chain2, Matrix);

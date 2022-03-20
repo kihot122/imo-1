@@ -3,7 +3,7 @@
 #include <set>
 #include "main.hpp"
 
-std::vector<int> Alg2(std::vector<std::vector<int>> Matrix)
+std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode)
 {
 	std::random_device Rand;
 
@@ -14,7 +14,7 @@ std::vector<int> Alg2(std::vector<std::vector<int>> Matrix)
 	for (int i = 0; i < Matrix.size(); i++)
 		AvailableNodes.insert(i);
 
-	int PivotA = Dist(Engine);
+	int PivotA = StartNode == -1 ? Dist(Engine) : StartNode;
 	int PivotB = std::distance(Matrix[PivotA].begin(), std::max_element(Matrix[PivotA].begin(), Matrix[PivotA].end()));
 	int SecondA = std::distance(Matrix[PivotA].begin(), std::min_element(Matrix[PivotA].begin(), Matrix[PivotA].end(), [&](auto &a, auto &b) { return a == 0 ? false : a < b; }));
 	int SecondB = std::distance(Matrix[PivotB].begin(), std::min_element(Matrix[PivotB].begin(), Matrix[PivotB].end(), [&](auto &a, auto &b) { return a == 0 ? false : a < b; }));

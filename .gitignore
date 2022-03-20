@@ -7,4 +7,4 @@
 !*.tsp
 !*.json
 !*.py
-!*.txt
+!requirements.txt
