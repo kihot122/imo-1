@@ -13,3 +13,21 @@ int ChainLength(const std::vector<int> &Cycles, const std::vector<std::vector<in
 std::vector<int> Alg1(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
+
+/**
+ * @brief Vertex exchange algorithm between 2 cycles, steep version.
+ *
+ * @param Matrix Adjacency matrix
+ * @param Cycles 2 consecutive cycles
+ * @return std::vector<int> 2 improved consecutive cycles
+ */
+std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
+
+/**
+ * @brief Vertex and edge exchange algorithm inside 2 cycles, steep version.
+ *
+ * @param Matrix Adjacency matrix
+ * @param Cycles 2 consecutive cycles
+ * @return std::vector<int> 2 improved consecutive cycles
+ */
+std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
