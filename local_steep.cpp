@@ -33,8 +33,21 @@ std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<in
 				int A1Max = A1 + 1 == Size ? 0 : A1 + 1;
 				int A2Max = A2 + 1 == Size ? 0 : A2 + 1;
 
-				DeltaA = Matrix[CycleA[A1Min]][CycleA[A2]] + Matrix[CycleA[A1Max]][CycleA[A2]] + Matrix[CycleA[A2Min]][CycleA[A1]] + Matrix[CycleA[A2Max]][CycleA[A1]] - Matrix[CycleA[A1Min]][CycleA[A1]] - Matrix[CycleA[A1Max]][CycleA[A1]] -
-						 Matrix[CycleA[A2Min]][CycleA[A2]] - Matrix[CycleA[A2Max]][CycleA[A2]];
+				//(A1-1 to A2) + (A1+1 to A2) + (A2-1 to A1) + (A2+1 to A1)
+				//- (A1-1 to A1) - (A1+1 to A1) - (A2-1 to A2) - (A2+1 to A2)
+				if (A1Max != A2 and A2Max != A1)
+					DeltaA = Matrix[CycleA[A1Min]][CycleA[A2]] + Matrix[CycleA[A1Max]][CycleA[A2]] + Matrix[CycleA[A2Min]][CycleA[A1]] + Matrix[CycleA[A2Max]][CycleA[A1]] - Matrix[CycleA[A1Min]][CycleA[A1]] - Matrix[CycleA[A1Max]][CycleA[A1]] -
+							 Matrix[CycleA[A2Min]][CycleA[A2]] - Matrix[CycleA[A2Max]][CycleA[A2]];
+
+				//(A1-1 to A2) + (A2+1 to A1)
+				//- (A1-1 to A1) - (A2+1 to A2)
+				else if (A2Max != A1)
+					DeltaA = Matrix[CycleA[A1Min]][CycleA[A2]] + Matrix[CycleA[A2Max]][CycleA[A1]] - Matrix[CycleA[A1Min]][CycleA[A1]] - Matrix[CycleA[A2Max]][CycleA[A2]];
+
+				//(A1 to A2-1) + (A2 to A1+1)
+				//- (A1 to A1+1) - (A2 to A2-1)
+				else
+					DeltaA = Matrix[CycleA[A1]][CycleA[A2Min]] + Matrix[CycleA[A2]][CycleA[A1Max]] - Matrix[CycleA[A1]][CycleA[A1Max]] - Matrix[CycleA[A2]][CycleA[A2Min]];
 
 				if (DeltaA < MinDeltaA)
 				{
@@ -72,11 +85,6 @@ std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<in
 					break;
 				}
 			}
-			std::vector<int> temp = CycleA;
-			temp.insert(temp.end(), CycleB.begin(), CycleB.end());
-			int x = ChainLength(temp, Matrix);
-			int y = ChainLength(Cycles, Matrix);
-			int z = 0;
 		}
 
 		for (int B1 = 0; B1 < CycleB.size(); B1++)
@@ -91,8 +99,21 @@ std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<in
 				int B1Max = B1 + 1 == Size ? 0 : B1 + 1;
 				int B2Max = B2 + 1 == Size ? 0 : B2 + 1;
 
-				DeltaB = Matrix[CycleB[B1Min]][CycleB[B2]] + Matrix[CycleB[B1Max]][CycleB[B2]] + Matrix[CycleB[B2Min]][CycleB[B1]] + Matrix[CycleB[B2Max]][CycleB[B1]] - Matrix[CycleB[B1Min]][CycleB[B1]] - Matrix[CycleB[B1Max]][CycleB[B1]] -
-						 Matrix[CycleB[B2Min]][CycleB[B2]] - Matrix[CycleB[B2Max]][CycleB[B2]];
+				//(B1-1 to B2) + (B1+1 to B2) + (B2-1 to B1) + (B2+1 to B1)
+				//- (B1-1 to B1) - (B1+1 to B1) - (B2-1 to B2) - (B2+1 to B2)
+				if (B1Max != B2 and B2Max != B1)
+					DeltaB = Matrix[CycleB[B1Min]][CycleB[B2]] + Matrix[CycleB[B1Max]][CycleB[B2]] + Matrix[CycleB[B2Min]][CycleB[B1]] + Matrix[CycleB[B2Max]][CycleB[B1]] - Matrix[CycleB[B1Min]][CycleB[B1]] - Matrix[CycleB[B1Max]][CycleB[B1]] -
+							 Matrix[CycleB[B2Min]][CycleB[B2]] - Matrix[CycleB[B2Max]][CycleB[B2]];
+
+				//(B1-1 to B2) + (B2+1 to B1)
+				//- (B1-1 to B1) - (B2+1 to B2)
+				else if (B2Max != B1)
+					DeltaB = Matrix[CycleB[B1Min]][CycleB[B2]] + Matrix[CycleB[B2Max]][CycleB[B1]] - Matrix[CycleB[B1Min]][CycleB[B1]] - Matrix[CycleB[B2Max]][CycleB[B2]];
+
+				//(B1 to B2-1) + (B2 to B1+1)
+				//- (B1 to B1+1) - (B2 to B2-1)
+				else
+					DeltaB = Matrix[CycleB[B1]][CycleB[B2Min]] + Matrix[CycleB[B2]][CycleB[B1Max]] - Matrix[CycleB[B1]][CycleB[B1Max]] - Matrix[CycleB[B2]][CycleB[B2Min]];
 
 				if (DeltaB < MinDeltaB)
 				{
@@ -102,7 +123,6 @@ std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<in
 					Type = EType::VERTEX;
 				}
 
-				//(X to Y) + (X+1 to Y+1) - (X to X+1) - (Y + Y+1)
 				DeltaB = Matrix[CycleB[B1]][CycleB[B2]] + Matrix[CycleB[B1Max]][CycleB[B2Max]] - Matrix[CycleB[B1]][CycleB[B1Max]] - Matrix[CycleB[B2]][CycleB[B2Max]];
 
 				if (DeltaB < MinDeltaB)
