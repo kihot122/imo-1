@@ -40,3 +40,13 @@ std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<in
  * @return 2 improved consecutive cycles
  */
 std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
+
+
+std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex);
+
+std::vector<int> cross(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount);
+std::vector<int> localCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount);
+
+void test(std::vector<int> &v);
+
+
