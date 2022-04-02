@@ -24,6 +24,15 @@ std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 
 /**
+ * @brief Vertex exchange algorithm between 2 cycles, greedy version.
+ *
+ * @param Matrix Adjacency matrix
+ * @param Cycles 2 consecutive cycles
+ * @return 2 improved consecutive cycles
+ */
+std::vector<int> CrossGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
+
+/**
  * @brief Vertex exchange algorithm between 2 cycles, steep version.
  *
  * @param Matrix Adjacency matrix
@@ -31,6 +40,15 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
  * @return 2 improved consecutive cycles
  */
 std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
+
+/**
+ * @brief Vertex and edge exchange algorithm inside 2 cycles, greedy version.
+ *
+ * @param Matrix Adjacency matrix
+ * @param Cycles 2 consecutive cycles
+ * @return 2 improved consecutive cycles
+ */
+std::vector<int> LocalGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 
 /**
  * @brief Vertex and edge exchange algorithm inside 2 cycles, steep version.
@@ -41,12 +59,7 @@ std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<in
  */
 std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 
+std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex); //???
 
-std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex);
-
-std::vector<int> cross(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount);
-std::vector<int> localCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount);
-
-void test(std::vector<int> &v);
-
-
+std::vector<int> cross(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount);				   //???
+std::vector<int> localCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount); //???
