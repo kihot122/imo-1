@@ -9,57 +9,45 @@ int main(int argc, char **argv)
 	auto Matrix = ReadMat(argc == 2 ? argv[1] : "kroA100.tsp");
 	auto Positions = ReadPos(argc == 2 ? argv[1] : "kroA100.tsp");
 
-	std::array<std::array<int, 3>, 100> Results;
-	std::array<int, 3> BestLength{0x0fffffff, 0x0fffffff, 0x0fffffff};
-	std::array<std::vector<int>, 3> BestChain;
+	std::array<std::array<int, 8>, 100> Results;
+	std::array<int, 8> BestLength;
+	std::ranges::fill(BestLength.begin(), BestLength.end(), 0x0fffffff);
+	std::array<std::vector<int>, 8> BestChain;
 
 	for (size_t i = 0; i < 100; i++)
 	{
-		const auto &Chain1 = Alg1(Matrix, i);
-		const auto &Chain2 = Alg2(Matrix, i);
-		const auto &Chain3 = Alg3(Matrix, i);
+		std::array<std::vector<int>, 8> Chains;
+		std::array<int, 8> Lengths;
 
-		int Length1 = ChainLength(Chain1, Matrix);
-		int Length2 = ChainLength(Chain2, Matrix);
-		int Length3 = ChainLength(Chain3, Matrix);
+		Chains[0] = std::vector<int>(100); // CrossGreedy with RandomChain here
+		Chains[1] = CrossSteep(Matrix, RandomChain(Matrix, 1000));
+		Chains[2] = std::vector<int>(100); // LocalGreedy with RandomChain here
+		Chains[3] = LocalSteep(Matrix, RandomChain(Matrix, 1000));
+		Chains[4] = std::vector<int>(100); // CrossGreedy with Alg2 here
+		Chains[5] = CrossSteep(Matrix, Alg2(Matrix, i));
+		Chains[6] = std::vector<int>(100); // LocalGreedy with Alg2 here
+		Chains[7] = LocalSteep(Matrix, Alg2(Matrix, i));
 
-		Results[i] = {Length1, Length2, Length3};
-
-		if (Length1 < BestLength[0])
+		for (int j = 0; j < 8; j++)
 		{
-			BestChain[0] = Chain1;
-			BestLength[0] = Length1;
-		}
-		if (Length2 < BestLength[1])
-		{
-			BestChain[1] = Chain2;
-			BestLength[1] = Length2;
-		}
-		if (Length3 < BestLength[2])
-		{
-			BestChain[2] = Chain2;
-			BestLength[2] = Length2;
+			Lengths[j] = ChainLength(Chains[j], Matrix);
+			if (Lengths[j] < BestLength[j])
+			{
+				BestLength[j] = Lengths[j];
+				BestChain[j] = Chains[j];
+			}
+			Results[i][j] = Lengths[j];
 		}
 	}
 
-	int Max1 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[0] < b[0]; }))[0];
-	int Max2 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[1] < b[1]; }))[1];
-	int Max3 = (*std::max_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[2] < b[2]; }))[2];
-
-	int Min1 = (*std::min_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[0] < b[0]; }))[0];
-	int Min2 = (*std::min_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[1] < b[1]; }))[1];
-	int Min3 = (*std::min_element(Results.begin(), Results.end(), [](auto &a, auto &b) { return a[2] < b[2]; }))[2];
-
-	int Avg1 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &&acc, auto &&ref) { return acc + ref[0]; }) / 100;
-	int Avg2 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &&acc, auto &&ref) { return acc + ref[1]; }) / 100;
-	int Avg3 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &&acc, auto &&ref) { return acc + ref[2]; }) / 100;
-
-	WriteChain(BestChain[0], Positions, "Alg1.txt");
-	WriteChain(BestChain[1], Positions, "Alg2.txt");
-	WriteChain(BestChain[2], Positions, "Alg3.txt");
-
 	std::fstream File("Results.txt", std::ios::out);
-	File << Max1 << " " << Max2 << " " << Max3 << std::endl;
-	File << Min1 << " " << Min2 << " " << Min3 << std::endl;
-	File << Avg1 << " " << Avg2 << " " << Avg3 << std::endl;
+	for (int i = 0; i < 8; i++)
+	{
+		int Max = (*std::max_element(Results.begin(), Results.end(), [&i](auto &a, auto &b) { return a[i] < b[i]; }))[i];
+		int Min = (*std::min_element(Results.begin(), Results.end(), [&i](auto &a, auto &b) { return a[i] < b[i]; }))[i];
+		int Avg = (std::accumulate(Results.begin(), Results.end(), 0, [&i](auto &&acc, auto &&ref) { return acc + ref[i]; }) / 100);
+
+		WriteChain(BestChain[i], Positions, "Chain-" + std::to_string(i));
+		File << Max << " " << Min << " " << Avg << std::endl;
+	}
 }
