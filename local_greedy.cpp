@@ -1,17 +1,18 @@
 #include <vector>
 #include <array>
 #include <iostream>
+#include <algorithm>
 
 #include "main.hpp"
 
 
-std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex)
-{
-    int prev = middleIndex - 1 < 0 ? Cycle.size() - 1 : middleIndex - 1;
-    int next = middleIndex + 1 == Cycle.size() ? 0 : middleIndex + 1;
+// std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex)
+// {
+//     int prev = middleIndex - 1 < 0 ? Cycle.size() - 1 : middleIndex - 1;
+//     int next = middleIndex + 1 == Cycle.size() ? 0 : middleIndex + 1;
     
-    return std::array<int, 3>{Cycle[prev], Cycle[middleIndex],Cycle[next]};
-}
+//     return std::array<int, 3>{Cycle[prev], Cycle[middleIndex],Cycle[next]};
+// }
 
 
 int pointsSwapProfit(std::vector<std::vector<int>> &matrix, std::vector<int> &cycle, int swapIndexA, int swapIndexB)
@@ -107,7 +108,7 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
 }
 
 
-bool localCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount)
+std::vector<int> localCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount)
 {
     auto CycleA = std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2);
 	auto CycleB = std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end());
@@ -124,9 +125,10 @@ bool localCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<i
             localCycleOptimisation(Matrix, CycleB, 1);
 
         if (cycleOptimalA and cycleOptimalB)
-            return false;
+            break;
 
     }
 
-    return true;
+    CycleA.insert( CycleA.end(), CycleB.begin(), CycleB.end());
+    return CycleA;
 }

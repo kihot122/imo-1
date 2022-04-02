@@ -2,6 +2,11 @@
 #include <array>
 #include <fstream>
 #include <numeric>
+#include <iostream>
+#include <filesystem>
+#include <ctime>
+namespace fs = std::filesystem;
+
 #include "main.hpp"
 
 int main(int argc, char **argv)
@@ -54,12 +59,24 @@ int main(int argc, char **argv)
 	int Avg2 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &&acc, auto &&ref) { return acc + ref[1]; }) / 100;
 	int Avg3 = std::accumulate(Results.begin(), Results.end(), 0, [](auto &&acc, auto &&ref) { return acc + ref[2]; }) / 100;
 
-	WriteChain(BestChain[0], Positions, "Alg1.txt");
-	WriteChain(BestChain[1], Positions, "Alg2.txt");
-	WriteChain(BestChain[2], Positions, "Alg3.txt");
+	fs::create_directory("out");
 
-	std::fstream File("Results.txt", std::ios::out);
+	time_t now = time(0);
+	std::stringstream ss;
+	ss << now;
+	std::string currDir = "out/"+ss.str();
+
+	std::cout << "Output directory: " << currDir << "\n";
+
+	fs::create_directory(currDir);
+
+	WriteChain(BestChain[0], Positions, currDir + "/Alg1.txt");
+	WriteChain(BestChain[1], Positions, currDir + "/Alg2.txt");
+	WriteChain(BestChain[2], Positions, currDir + "/Alg3.txt");
+
+	std::fstream File(currDir + "Results.txt", std::ios::out);
 	File << Max1 << " " << Max2 << " " << Max3 << std::endl;
 	File << Min1 << " " << Min2 << " " << Min3 << std::endl;
 	File << Avg1 << " " << Avg2 << " " << Avg3 << std::endl;
+
 }
