@@ -10,6 +10,15 @@ void WritePos(const std::vector<std::tuple<int, int>> &Vec, const std::string &F
 void WriteChain(const std::vector<int> &Cycles, const std::vector<std::tuple<int, int>> &Positions, const std::string &Filename);
 int ChainLength(const std::vector<int> &Cycles, const std::vector<std::vector<int>> &Matrix);
 
+/**
+ * @brief Get the random chain, best of number of rolls
+ *
+ * @param Matrix Adjacency matrix
+ * @param Tries Number of rolls
+ * @return 2 consecutive cycles
+ */
+std::vector<int> RandomChain(std::vector<std::vector<int>> Matrix, int Tries = 100);
+
 std::vector<int> Alg1(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
@@ -19,7 +28,7 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
  *
  * @param Matrix Adjacency matrix
  * @param Cycles 2 consecutive cycles
- * @return std::vector<int> 2 improved consecutive cycles
+ * @return 2 improved consecutive cycles
  */
 std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 
@@ -28,6 +37,6 @@ std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<in
  *
  * @param Matrix Adjacency matrix
  * @param Cycles 2 consecutive cycles
- * @return std::vector<int> 2 improved consecutive cycles
+ * @return 2 improved consecutive cycles
  */
 std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
