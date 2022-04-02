@@ -4,7 +4,6 @@
 #include "main.hpp"
 
 
-
 std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex)
 {
     int prev = middleIndex - 1 < 0 ? Cycle.size() - 1 : middleIndex - 1;
@@ -62,7 +61,7 @@ std::vector<int> cross(std::vector<std::vector<int>> Matrix, std::vector<int> Cy
         {
             for (int b = 0; b < CycleB.size(); b++)
             {
-                localDelta = crossDeltaProfit(Matrix, CycleA, CycleB, i, b);
+                localDelta = crossDeltaProfit(Matrix, CycleA, CycleB, a, b);
                 if (localDelta > 0)
                 {
                     std::swap(CycleA[a], CycleB[b]);
