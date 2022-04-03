@@ -30,7 +30,7 @@ std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
  * @param Cycles 2 consecutive cycles
  * @return 2 improved consecutive cycles
  */
-std::vector<int> CrossGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount);
+std::vector<int> CrossGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount = INT16_MAX);
 
 /**
  * @brief Vertex exchange algorithm between 2 cycles, steep version.
@@ -48,7 +48,7 @@ std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<in
  * @param Cycles 2 consecutive cycles
  * @return 2 improved consecutive cycles
  */
-std::vector<int> LocalGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount);
+std::vector<int> LocalGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount = INT16_MAX);
 
 /**
  * @brief Vertex and edge exchange algorithm inside 2 cycles, steep version.
@@ -61,16 +61,10 @@ std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<in
 
 /**
  * @brief Return adjacent indeses from cycle.
- * 
+ *
  * @param Cycle the cycle
  * @param middleIndex cycle index of returned and in between of returned values
- * 
+ *
  * @return array of previous, pointed and next value of specified by given index
  **/
-std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex); 
-
-
-// std::vector<int> crossCyclesGreedyOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount);
-
-
-// std::vector<int> localCyclesGreedyOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount);
+std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex);
