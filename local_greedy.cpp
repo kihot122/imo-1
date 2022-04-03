@@ -82,6 +82,12 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
     int cycleSize = cycle.size();
 
     std::vector<int> randomIndex1, randomIndex2;
+    for (int i = 0; i < cycleSize; i++)
+    {
+        randomIndex1.push_back(i);
+        randomIndex2.push_back(i);
+    }
+    
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine rng = std::default_random_engine(seed);
 
@@ -89,12 +95,8 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
     {
         swapped = false;
 
-        for (int i = 0; i < cycleSize; i++)
-        {
-            randomIndex1.push_back(i);
-            randomIndex2.push_back(i);
-        }
-        rng = std::default_random_engine(seed);
+        
+        // rng = std::default_random_engine(seed);
         std::shuffle(std::begin(randomIndex1), std::end(randomIndex1), rng);
         std::shuffle(std::begin(randomIndex2), std::end(randomIndex2), rng);
 
