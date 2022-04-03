@@ -62,6 +62,8 @@ int main(int argc, char **argv)
 
 		TimeA = std::chrono::high_resolution_clock::now();
 		Chains[7] = LocalSteep(Matrix, Alg2(Matrix, i));
+		TimeB = std::chrono::high_resolution_clock::now();
+		Times[i][6] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		for (int j = 0; j < 8; j++)
 		{
