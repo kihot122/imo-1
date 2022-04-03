@@ -12,11 +12,7 @@ int main(int argc, char **argv)
 
 	std::array<std::array<int, 8>, 100> Results;
 	std::array<int, 8> BestLength;
-	// std::ranges::fill(BestLength.begin(), BestLength.end(), 0x0fffffff);
-	for (int i = 0; i < BestLength.size(); i++)
-	{
-		BestLength[i] = 0x0fffffff;
-	}
+	std::ranges::fill(BestLength.begin(), BestLength.end(), 0x0fffffff);
 	std::array<std::vector<int>, 8> BestChain;
 
 	for (size_t i = 0; i < 100; i++)
