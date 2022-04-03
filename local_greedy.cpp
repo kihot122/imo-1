@@ -71,11 +71,6 @@ void swapLocalPoints(std::vector<int> &cycle, int indexA, int indexB)
 
 void swapLocalSections(std::vector<int> &cycle, int sectionIndexA, int sectionIndexB)
 {
-    // if (sectionIndexA < sectionIndexB)
-    //     std::reverse(std::begin(cycle)+sectionIndexA, std::begin(cycle)+sectionIndexB+1);
-    // else
-    //     std::reverse(std::begin(cycle)+sectionIndexB, std::begin(cycle)+sectionIndexA+1);
-
     std::reverse(cycle.begin() + sectionIndexA + 1, cycle.begin() + sectionIndexB + 1);
 }
 
@@ -133,23 +128,27 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
         }
 
         if (not swapped)
+        {
+            std::cout << changes << "\n";
             return false;
+        }
+            
     }
 
     return true;
 }
 
 
-std::vector<int> localCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount)
+std::vector<int> LocalGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, int changesCount)
 {
     auto CycleA = std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2);
 	auto CycleB = std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end());
 
     bool cycleOptimalA = true, cycleOptimalB = true;
 
-    localCycleOptimisation(Matrix, CycleA, changesCount/2);
+    std::cout << localCycleOptimisation(Matrix, CycleA, changesCount/2)  << "\n";
 
-    localCycleOptimisation(Matrix, CycleB, changesCount/2);
+    std::cout << localCycleOptimisation(Matrix, CycleB, changesCount/2)  << "\n";
     
     // bool cycleOptimalA = true, cycleOptimalB = true;
     // for (int count = 0; count < changesCount; count++)

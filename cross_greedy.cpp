@@ -45,7 +45,7 @@ int validateCycle(std::vector<std::vector<int>> &matrix, std::vector<int> &cycle
 }
 
 
-std::vector<int> crossCyclesOptimisation(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount)
+std::vector<int> CrossGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount)
 {
     auto CycleA = std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2);
 	auto CycleB = std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end());
@@ -66,9 +66,6 @@ std::vector<int> crossCyclesOptimisation(std::vector<std::vector<int>> Matrix, s
                 
                 if (localDelta < 0)
                 {
-                    std::cout << a << "\n";
-                    std::cout << b << "\n";
-                    std::cout << localDelta << "\n";
                     std::swap(CycleA[a], CycleB[b]);
                     a = CycleA.size();
                     b = CycleB.size();
@@ -79,7 +76,6 @@ std::vector<int> crossCyclesOptimisation(std::vector<std::vector<int>> Matrix, s
 
         if (not swapped)
         {
-            std::cout << "Perfect!!" << "\n";
             break;
         }
     }

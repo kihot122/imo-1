@@ -12,7 +12,11 @@ int main(int argc, char **argv)
 
 	std::array<std::array<int, 8>, 100> Results;
 	std::array<int, 8> BestLength;
-	std::ranges::fill(BestLength.begin(), BestLength.end(), 0x0fffffff);
+	// std::ranges::fill(BestLength.begin(), BestLength.end(), 0x0fffffff);
+	for (int i = 0; i < BestLength.size(); i++)
+	{
+		BestLength[i] = 0x0fffffff;
+	}
 	std::array<std::vector<int>, 8> BestChain;
 
 	for (size_t i = 0; i < 100; i++)
@@ -20,14 +24,15 @@ int main(int argc, char **argv)
 		std::array<std::vector<int>, 8> Chains;
 		std::array<int, 8> Lengths;
 
-		Chains[0] = std::vector<int>(100); // CrossGreedy with RandomChain here
+		Chains[0] = CrossGreedy(Matrix, RandomChain(Matrix, 1000), INT16_MAX);//std::vector<int>(100); // CrossGreedy with RandomChain here
 		Chains[1] = CrossSteep(Matrix, RandomChain(Matrix, 1000));
-		Chains[2] = std::vector<int>(100); // LocalGreedy with RandomChain here
+		Chains[2] = LocalGreedy(Matrix, RandomChain(Matrix, 1000), INT16_MAX);//std::vector<int>(100); // LocalGreedy with RandomChain here
 		Chains[3] = LocalSteep(Matrix, RandomChain(Matrix, 1000));
-		Chains[4] = std::vector<int>(100); // CrossGreedy with Alg2 here
+		Chains[4] = CrossGreedy(Matrix, Alg2(Matrix, i), INT16_MAX);//std::vector<int>(100); // CrossGreedy with Alg2 here
 		Chains[5] = CrossSteep(Matrix, Alg2(Matrix, i));
-		Chains[6] = std::vector<int>(100); // LocalGreedy with Alg2 here
+		Chains[6] = LocalGreedy(Matrix, Alg2(Matrix, i), INT16_MAX);//std::vector<int>(100); // LocalGreedy with Alg2 here
 		Chains[7] = LocalSteep(Matrix, Alg2(Matrix, i));
+		std::cout << "-" << "\n";
 
 		for (int j = 0; j < 8; j++)
 		{
