@@ -22,16 +22,29 @@ int pointsSwapProfit(std::vector<std::vector<int>> &matrix, std::vector<int> &cy
     std::array<int, 3> cyclePointsA = getFromCyclePrevMiddleNext(cycle, swapIndexA);
     std::array<int, 3> cyclePointsB = getFromCyclePrevMiddleNext(cycle, swapIndexB);
 
-    int beforePartValue = 
-        matrix[cyclePointsA[1]][cyclePointsA[0]] + matrix[cyclePointsA[1]][cyclePointsA[2]] + 
-        matrix[cyclePointsB[1]][cyclePointsB[0]] + matrix[cyclePointsB[1]][cyclePointsB[2]];
+    int A1Min = cyclePointsA[0]; 
+    int A1 =  cyclePointsA[1]; 
+    int A1Max = cyclePointsA[2]; 
+    int A2Min = cyclePointsB[0]; 
+    int A2 = cyclePointsB[1]; 
+    int A2Max = cyclePointsB[2];
+    int DeltaA = 0;
 
-    int afterPartValue = 
-        matrix[cyclePointsA[1]][cyclePointsB[0]] + matrix[cyclePointsA[1]][cyclePointsB[2]] + 
-        matrix[cyclePointsB[1]][cyclePointsA[0]] + matrix[cyclePointsB[1]][cyclePointsA[2]];
+    //(A1-1 to A2) + (A1+1 to A2) + (A2-1 to A1) + (A2+1 to A1)
+    //- (A1-1 to A1) - (A1+1 to A1) - (A2-1 to A2) - (A2+1 to A2)
+    if (A1Max != A2 and A2Max != A1)
+        DeltaA = matrix[A1Min][A2] + matrix[A1Max][A2] + matrix[A2Min][A1] + matrix[A2Max][A1] - matrix[A1Min][A1] - matrix[A1Max][A1] -
+                    matrix[A2Min][A2] - matrix[A2Max][A2];
+    //(A1-1 to A2) + (A2+1 to A1)
+    //- (A1-1 to A1) - (A2+1 to A2)
+    else if (A2Max != A1)
+        DeltaA = matrix[A1Min][A2] + matrix[A2Max][A1] - matrix[A1Min][A1] - matrix[A2Max][A2];
+    //(A1 to A2-1) + (A2 to A1+1)
+    //- (A1 to A1+1) - (A2 to A2-1)
+    else
+        DeltaA = matrix[A1][A2Min] + matrix[A2][A1Max] - matrix[A1][A1Max] - matrix[A2][A2Min];
 
-
-    return afterPartValue - beforePartValue;
+    return DeltaA;
 }
 
 
@@ -40,9 +53,11 @@ int sectionsSwapProfit(std::vector<std::vector<int>> &matrix, std::vector<int> &
     std::array<int, 3> cyclePointsA = getFromCyclePrevMiddleNext(cycle, sectionIndexA);
     std::array<int, 3> cyclePointsB = getFromCyclePrevMiddleNext(cycle, sectionIndexB);
 
-    int beforePartValue = matrix[cyclePointsA[0]][cyclePointsA[1]] + matrix[cyclePointsB[0]][cyclePointsB[1]];
+    int beforePartValue = matrix[cyclePointsA[1]][cyclePointsA[2]] + matrix[cyclePointsB[1]][cyclePointsB[2]];
 
-    int afterPartValue = matrix[cyclePointsA[0]][cyclePointsB[0]] + matrix[cyclePointsA[1]][cyclePointsB[1]];
+    int afterPartValue = matrix[cyclePointsA[1]][cyclePointsB[1]] + matrix[cyclePointsA[2]][cyclePointsB[2]];
+
+    // DeltaA = Matrix[CycleA[A1]][CycleA[A2]] + Matrix[CycleA[A1Max]][CycleA[A2Max]] - Matrix[CycleA[A1]][CycleA[A1Max]] - Matrix[CycleA[A2]][CycleA[A2Max]];
 
     return afterPartValue - beforePartValue;
 }
@@ -56,10 +71,12 @@ void swapLocalPoints(std::vector<int> &cycle, int indexA, int indexB)
 
 void swapLocalSections(std::vector<int> &cycle, int sectionIndexA, int sectionIndexB)
 {
-    if (sectionIndexA < sectionIndexB)
-        std::reverse(std::begin(cycle)+sectionIndexA, std::begin(cycle)+sectionIndexB+1);
-    else
-        std::reverse(std::begin(cycle)+sectionIndexB, std::begin(cycle)+sectionIndexA+1);
+    // if (sectionIndexA < sectionIndexB)
+    //     std::reverse(std::begin(cycle)+sectionIndexA, std::begin(cycle)+sectionIndexB+1);
+    // else
+    //     std::reverse(std::begin(cycle)+sectionIndexB, std::begin(cycle)+sectionIndexA+1);
+
+    std::reverse(cycle.begin() + sectionIndexA + 1, cycle.begin() + sectionIndexB + 1);
 }
 
 
@@ -77,7 +94,6 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
     {
         swapped = false;
 
-
         for (int i = 0; i < cycleSize; i++)
         {
             randomIndex1.push_back(i);
@@ -86,30 +102,19 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
         rng = std::default_random_engine(seed);
         std::shuffle(std::begin(randomIndex1), std::end(randomIndex1), rng);
         std::shuffle(std::begin(randomIndex2), std::end(randomIndex2), rng);
-        // std::cout << randomIndex1[0] << "\n";
-        // std::cout << randomIndex2[0] << "\n";
 
         for (int a : randomIndex1)
         {
             for (int b : randomIndex2)
             {
-                // std::cout << a << "\n";
-                // std::cout << b << "\n";
-
-                if (a == b || a == (b + 1)%cycleSize || a == (b - 1)%cycleSize)
+                if (a == b)
                     continue;
 
                 localDelta = pointsSwapProfit(Matrix, cycle, a, b);
                 if (localDelta < 0)
                 {
-                    // std::cout << a << "\n";
-                    // std::cout << b << "\n";
-                    // std::cout << localDelta << "\n";
-                    
                     swapLocalPoints(cycle, a, b);
 
-                    // a = cycleSize;
-                    // b = cycleSize;
                     swapped = true;
                     break;
                 }
@@ -117,12 +122,8 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
                 localDelta = sectionsSwapProfit(Matrix, cycle, a, b);
                 if (localDelta < 0)
                 {
-
-                    // std::cout << localDelta << "\n";
                     swapLocalSections(cycle, a, b);
 
-                    // a = cycleSize;
-                    // b = cycleSize;
                     swapped = true;
                     break;
                 }
@@ -144,21 +145,22 @@ std::vector<int> localCyclesOptimisation(std::vector<std::vector<int>> Matrix, s
     auto CycleA = std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2);
 	auto CycleB = std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end());
 
-    bool cycleOptimalA = false, cycleOptimalB = false;
+    bool cycleOptimalA = true, cycleOptimalB = true;
 
     localCycleOptimisation(Matrix, CycleA, changesCount/2);
 
     localCycleOptimisation(Matrix, CycleB, changesCount/2);
-
+    
+    // bool cycleOptimalA = true, cycleOptimalB = true;
     // for (int count = 0; count < changesCount; count++)
     // {
-    //     if (not cycleOptimalA) 
-    //         localCycleOptimisation(Matrix, CycleA, 1);
+    //     if (cycleOptimalA) 
+    //         cycleOptimalA = localCycleOptimisation(Matrix, CycleA, 1);
         
-    //     if (not cycleOptimalB) 
-    //         localCycleOptimisation(Matrix, CycleB, 1);
+    //     if (cycleOptimalB) 
+    //         cycleOptimalB = localCycleOptimisation(Matrix, CycleB, 1);
 
-    //     if (cycleOptimalA and cycleOptimalB)
+    //     if (not (cycleOptimalA and cycleOptimalB))
     //         break;
 
     // }
