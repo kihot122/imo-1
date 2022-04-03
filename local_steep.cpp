@@ -59,7 +59,7 @@ std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<in
 						Type = EType::VERTEX;
 					}
 
-					//(X to Y) + (X+1 to Y+1) - (X to X+1) - (Y + Y+1)
+					//(A to B) + (A+1 to B+1) - (A to B+1) - (A + B+1)
 					Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
 
 					if (Delta < MinDelta)
