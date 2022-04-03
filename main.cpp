@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 		Chains[5] = CrossSteep(Matrix, Alg2(Matrix, i));
 		Chains[6] = LocalGreedy(Matrix, Alg2(Matrix, i), INT16_MAX);//std::vector<int>(100); // LocalGreedy with Alg2 here
 		Chains[7] = LocalSteep(Matrix, Alg2(Matrix, i));
-		std::cout << "-" << "\n";
+		// std::cout << "-" << "\n";
 
 		for (int j = 0; j < 8; j++)
 		{

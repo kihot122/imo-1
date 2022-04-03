@@ -131,7 +131,6 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
 
         if (not swapped)
         {
-            std::cout << changes << "\n";
             return false;
         }
             
@@ -148,9 +147,9 @@ std::vector<int> LocalGreedy(std::vector<std::vector<int>> Matrix, std::vector<i
 
     bool cycleOptimalA = true, cycleOptimalB = true;
 
-    std::cout << localCycleOptimisation(Matrix, CycleA, changesCount/2)  << "\n";
+    localCycleOptimisation(Matrix, CycleA, changesCount/2);
 
-    std::cout << localCycleOptimisation(Matrix, CycleB, changesCount/2)  << "\n";
+    localCycleOptimisation(Matrix, CycleB, changesCount/2);
     
     // bool cycleOptimalA = true, cycleOptimalB = true;
     // for (int count = 0; count < changesCount; count++)
