@@ -1,0 +1,1 @@
+g++ -O3 -march=native -flto -pipe -std=c++20 main.cpp parser.cpp helper.cpp alg1.cpp alg2.cpp alg3.cpp cross_greedy.cpp cross_steep.cpp local_greedy.cpp local_steep.cpp -o main
