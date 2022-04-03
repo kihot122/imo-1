@@ -145,21 +145,22 @@ std::vector<int> localCyclesOptimisation(std::vector<std::vector<int>> Matrix, s
     auto CycleA = std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2);
 	auto CycleB = std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end());
 
-    bool cycleOptimalA = false, cycleOptimalB = false;
+    bool cycleOptimalA = true, cycleOptimalB = true;
 
     localCycleOptimisation(Matrix, CycleA, changesCount/2);
 
     localCycleOptimisation(Matrix, CycleB, changesCount/2);
-
+    
+    // bool cycleOptimalA = true, cycleOptimalB = true;
     // for (int count = 0; count < changesCount; count++)
     // {
-    //     if (not cycleOptimalA) 
-    //         localCycleOptimisation(Matrix, CycleA, 1);
+    //     if (cycleOptimalA) 
+    //         cycleOptimalA = localCycleOptimisation(Matrix, CycleA, 1);
         
-    //     if (not cycleOptimalB) 
-    //         localCycleOptimisation(Matrix, CycleB, 1);
+    //     if (cycleOptimalB) 
+    //         cycleOptimalB = localCycleOptimisation(Matrix, CycleB, 1);
 
-    //     if (cycleOptimalA and cycleOptimalB)
+    //     if (not (cycleOptimalA and cycleOptimalB))
     //         break;
 
     // }
