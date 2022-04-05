@@ -23,41 +23,12 @@ std::vector<int> Alg1(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 
-/**
- * @brief Vertex exchange algorithm between 2 cycles, greedy version.
- *
- * @param Matrix Adjacency matrix
- * @param Cycles 2 consecutive cycles
- * @return 2 improved consecutive cycles
- */
-std::vector<int> CrossGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount = INT16_MAX);
-
-/**
- * @brief Vertex exchange algorithm between 2 cycles, steep version.
- *
- * @param Matrix Adjacency matrix
- * @param Cycles 2 consecutive cycles
- * @return 2 improved consecutive cycles
- */
-std::vector<int> CrossSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
-
-/**
- * @brief Vertex and edge exchange algorithm inside 2 cycles, greedy version.
- *
- * @param Matrix Adjacency matrix
- * @param Cycles 2 consecutive cycles
- * @return 2 improved consecutive cycles
- */
-std::vector<int> LocalGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int changesCount = INT16_MAX);
-
-/**
- * @brief Vertex and edge exchange algorithm inside 2 cycles, steep version.
- *
- * @param Matrix Adjacency matrix
- * @param Cycles 2 consecutive cycles
- * @return 2 improved consecutive cycles
- */
-std::vector<int> LocalSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
+std::vector<int> VertexRandom(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, uint64_t Timeout = 1000000);
+std::vector<int> VertexGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int ChangesCount = INT16_MAX);
+std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
+std::vector<int> EdgeRandom(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, uint64_t Timeout = 1000000);
+std::vector<int> EdgeGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int ChangesCount = INT16_MAX);
+std::vector<int> EdgeSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 
 /**
  * @brief Return adjacent indeses from cycle.
