@@ -23,10 +23,10 @@ std::vector<int> Alg1(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 std::vector<int> Alg3(std::vector<std::vector<int>> Matrix, int StartNode = -1);
 
-std::vector<int> VertexRandom(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, uint64_t Timeout = 1000000);
+std::vector<int> VertexRandom(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, unsigned timeNs);
 std::vector<int> VertexGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
-std::vector<int> EdgeRandom(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, uint64_t Timeout = 1000000);
+std::vector<int> EdgeRandom(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, unsigned timeNs);
 std::vector<int> EdgeGreedy(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 std::vector<int> EdgeSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 

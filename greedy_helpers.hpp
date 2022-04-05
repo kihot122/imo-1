@@ -24,4 +24,7 @@ void swapLocalSections(std::vector<int> &cycle, int sectionIndexA, int sectionIn
 
 bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<int> &cycle, int changesCount, bool sections);
 
+bool CrossGreedyRandom(std::vector<std::vector<int>> &Matrix, std::vector<int> &CycleA, std::vector<int> &CycleB, int changesCount);
+
+bool localCycleRandom(std::vector<std::vector<int>> &Matrix, std::vector<int> &cycle, int changesCount, bool sections);
 

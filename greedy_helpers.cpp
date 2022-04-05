@@ -80,9 +80,6 @@ bool CrossGreedy(std::vector<std::vector<int>> &Matrix, std::vector<int> &CycleA
             {
                 localDelta = crossDeltaProfit(Matrix, CycleA, CycleB, a, b);
 
-                
-
-                
                 if (localDelta < 0)
                 {
                     std::swap(CycleA[a], CycleB[b]);
@@ -107,7 +104,6 @@ bool CrossGreedy(std::vector<std::vector<int>> &Matrix, std::vector<int> &CycleA
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 int localPointsSwapProfit(std::vector<std::vector<int>> &matrix, std::vector<int> &cycle, int swapIndexA, int swapIndexB)
 {
@@ -146,11 +142,9 @@ int localSectionsSwapProfit(std::vector<std::vector<int>> &matrix, std::vector<i
     std::array<int, 3> cyclePointsB = getFromCyclePrevMiddleNext(cycle, sectionIndexB);
 
     int beforePartValue = matrix[cyclePointsA[1]][cyclePointsA[2]] + matrix[cyclePointsB[1]][cyclePointsB[2]];
-
     int afterPartValue = matrix[cyclePointsA[1]][cyclePointsB[1]] + matrix[cyclePointsA[2]][cyclePointsB[2]];
 
     // DeltaA = Matrix[CycleA[A1]][CycleA[A2]] + Matrix[CycleA[A1Max]][CycleA[A2Max]] - Matrix[CycleA[A1]][CycleA[A1Max]] - Matrix[CycleA[A2]][CycleA[A2Max]];
-
     return afterPartValue - beforePartValue;
 }
 
@@ -187,7 +181,6 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
     {
         swapped = false;
 
-        
         // rng = std::default_random_engine(seed);
         std::shuffle(std::begin(randomIndex1), std::end(randomIndex1), rng);
         std::shuffle(std::begin(randomIndex2), std::end(randomIndex2), rng);
@@ -234,4 +227,138 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
 
     return true;
 }
+
+//random--------------------------------------------------------------------------------------------------------------
+
+bool localCycleRandom(std::vector<std::vector<int>> &Matrix, std::vector<int> &cycle, int changesCount, bool sections)
+{
+    int localDelta;
+    bool swapped;
+    int cycleSize = cycle.size();
+
+    std::vector<int> randomIndex1, randomIndex2;
+    for (int i = 0; i < cycleSize; i++)
+    {
+        randomIndex1.push_back(i);
+        randomIndex2.push_back(i);
+    }
+    
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng = std::default_random_engine(seed);
+
+    for (int changes = 0; changes < changesCount; changes++)
+    {
+        swapped = false;
+
+        // rng = std::default_random_engine(seed);
+        std::shuffle(std::begin(randomIndex1), std::end(randomIndex1), rng);
+        std::shuffle(std::begin(randomIndex2), std::end(randomIndex2), rng);
+
+        for (int a : randomIndex1)
+        {
+            for (int b : randomIndex2)
+            {
+                if (a == b)
+                    continue;
+
+                if (not sections)
+                {
+                    localDelta = localPointsSwapProfit(Matrix, cycle, a, b);
+                    if (true)
+                    {
+                        swapLocalPoints(cycle, a, b);
+
+                        swapped = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    localDelta = localSectionsSwapProfit(Matrix, cycle, a, b);
+                    if (true)
+                    {
+                        swapLocalSections(cycle, a, b);
+
+                        swapped = true;
+                        break;
+                    }
+                }
+            }
+            if (swapped)
+                break;
+        }
+
+        if (not swapped)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CrossGreedyRandom(std::vector<std::vector<int>> &Matrix, std::vector<int> &CycleA, std::vector<int> &CycleB, int changesCount)
+{
+    int localDelta;
+    bool swapped;
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng = std::default_random_engine(seed);
+
+    std::vector<int> randomIndex1, randomIndex2;
+    for (int i = 0; i < CycleA.size(); i++)
+    {
+        randomIndex1.push_back(i);
+    }
+
+    for (int i = 0; i < CycleB.size(); i++)
+    {
+        randomIndex2.push_back(i);
+    }
+
+
+
+    for (int changes = 0; changes < changesCount; changes++)
+    {
+        swapped = false;
+        std::shuffle(std::begin(randomIndex1), std::end(randomIndex1), rng);
+        std::shuffle(std::begin(randomIndex2), std::end(randomIndex2), rng);
+
+        for (int a : randomIndex1)
+        {
+            for (int b : randomIndex2)
+            {
+                localDelta = crossDeltaProfit(Matrix, CycleA, CycleB, a, b);
+
+                if (true)
+                {
+                    std::swap(CycleA[a], CycleB[b]);
+                    swapped = true;
+                    break;
+                }
+
+            }
+            if (swapped)
+            {
+                break;
+            }
+        }
+
+        if (not swapped)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
+
+
+
+
+
+
 
