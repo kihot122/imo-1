@@ -1,6 +1,8 @@
 #include <array>
 #include <vector>
 #include <iostream>
+#include <random>
+#include <chrono>
 
 #include "main.hpp"
 
@@ -54,23 +56,45 @@ std::vector<int> CrossGreedy(std::vector<std::vector<int>> Matrix, std::vector<i
     int localDelta;
     bool swapped;
 
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine rng = std::default_random_engine(seed);
+
+    std::vector<int> randomIndex1, randomIndex2;
+    for (int i = 0; i < CycleA.size(); i++)
+    {
+        randomIndex1.push_back(i);
+    }
+
+    for (int i = 0; i < CycleB.size(); i++)
+    {
+        randomIndex2.push_back(i);
+    }
+
+
+
     for (int changes = 0; changes < changesCount; changes++)
     {
         swapped = false;
+        std::shuffle(std::begin(randomIndex1), std::end(randomIndex1), rng);
+        std::shuffle(std::begin(randomIndex2), std::end(randomIndex2), rng);
 
-        for (int a = 0; a < CycleA.size(); a++)
+        for (int a : randomIndex1)
         {
-            for (int b = 0; b < CycleB.size(); b++)
+            for (int b : randomIndex2)
             {
                 localDelta = crossDeltaProfit(Matrix, CycleA, CycleB, a, b);
                 
                 if (localDelta < 0)
                 {
                     std::swap(CycleA[a], CycleB[b]);
-                    a = CycleA.size();
-                    b = CycleB.size();
                     swapped = true;
+                    break;
                 }
+
+            }
+            if (swapped)
+            {
+                break;
             }
         }
 
