@@ -85,10 +85,6 @@ bool CrossGreedy(std::vector<std::vector<int>> &Matrix, std::vector<int> &CycleA
                 
                 if (localDelta < 0)
                 {
-                    std::cout << localDelta << "\n";
-                    std::cout << CycleA[a] << "\n";
-                    std::cout << CycleB[b] << "\n";
-
                     std::swap(CycleA[a], CycleB[b]);
                     swapped = true;
                     break;
