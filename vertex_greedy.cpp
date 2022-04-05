@@ -16,7 +16,6 @@ std::vector<int> VertexGreedy(std::vector<std::vector<int>> Matrix, std::vector<
         cycleNotOptimalA = localCycleOptimisation(Matrix, CycleA, 1, false);
         cycleNotOptimalB = localCycleOptimisation(Matrix, CycleB, 1, false);
         cyclesNotOptimal = CrossGreedy(Matrix, CycleA, CycleB, 1);
-        std::cout << cycleNotOptimalA << cycleNotOptimalB << cyclesNotOptimal << "\n";
     }
     
     
