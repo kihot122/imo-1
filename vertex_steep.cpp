@@ -1,6 +1,6 @@
 #include "main.hpp"
 
-enum class VertexType : bool
+enum class ExchangeType : bool
 {
 	LOCAL,
 	CROSS,
@@ -18,7 +18,7 @@ std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<i
 		MinDelta = 0;
 		int Delta;
 		int ChoiceA, ChoiceB, CycleIndex;
-		VertexType Type;
+		ExchangeType Type;
 
 		for (int i = 0; auto &&Cycle : CyclesArr)
 		{
@@ -56,7 +56,7 @@ std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<i
 						ChoiceA = A;
 						ChoiceB = B;
 						CycleIndex = i;
-						Type = VertexType::LOCAL;
+						Type = ExchangeType::LOCAL;
 					}
 				}
 			}
@@ -67,8 +67,6 @@ std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<i
 		{
 			for (int B = 0; B < CycleB.size(); B++)
 			{
-				//(A-1 to B) + (A+1 to B) + (B-1 to A) + (B+1 to A)
-				//- (A-1 to A) - (A+1 to A) - (B-1 to B) - (B+1 to B)
 				int SizeA = static_cast<int>(CycleA.size());
 				int SizeB = static_cast<int>(CycleB.size());
 
@@ -78,6 +76,8 @@ std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<i
 				int AMax = A + 1 == SizeA ? 0 : A + 1;
 				int BMax = B + 1 == SizeB ? 0 : B + 1;
 
+				//(A-1 to B) + (A+1 to B) + (B-1 to A) + (B+1 to A)
+				//- (A-1 to A) - (A+1 to A) - (B-1 to B) - (B+1 to B)
 				Delta = Matrix[CycleA[AMin]][CycleB[B]] + Matrix[CycleA[AMax]][CycleB[B]] + Matrix[CycleB[BMin]][CycleA[A]] + Matrix[CycleB[BMax]][CycleA[A]] - Matrix[CycleA[AMin]][CycleA[A]] - Matrix[CycleA[AMax]][CycleA[A]] -
 						Matrix[CycleB[BMin]][CycleB[B]] - Matrix[CycleB[BMax]][CycleB[B]];
 
@@ -86,7 +86,7 @@ std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<i
 					MinDelta = Delta;
 					ChoiceA = A;
 					ChoiceB = B;
-					Type = VertexType::CROSS;
+					Type = ExchangeType::CROSS;
 				}
 			}
 		}
@@ -95,12 +95,12 @@ std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<i
 		{
 			switch (Type)
 			{
-				case VertexType::LOCAL:
+				case ExchangeType::LOCAL:
 				{
 					std::swap(CyclesArr[CycleIndex][ChoiceA], CyclesArr[CycleIndex][ChoiceB]);
 					break;
 				}
-				case VertexType::CROSS:
+				case ExchangeType::CROSS:
 				{
 					std::swap(CycleA[ChoiceA], CycleB[ChoiceB]);
 					break;
