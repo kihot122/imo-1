@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-std::vector<int> VertexRandom(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, unsigned timeNs)
+std::vector<int> VertexRandom(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, uint64_t timeNs)
 {
     auto CycleA = std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2);
 	auto CycleB = std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end());
