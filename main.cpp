@@ -25,43 +25,47 @@ int main(int argc, char **argv)
 		std::array<std::vector<int>, 8> Chains;
 		std::array<int, 8> Lengths;
 
+		auto Initial = RandomChain(Matrix, 100);
+
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[0] = VertexGreedy(Matrix, RandomChain(Matrix, 100));
+		Chains[0] = VertexGreedy(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][0] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[1] = VertexSteep(Matrix, RandomChain(Matrix, 100));
+		Chains[1] = VertexSteep(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][1] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[2] = EdgeGreedy(Matrix, RandomChain(Matrix, 100));
+		Chains[2] = EdgeGreedy(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[3] = EdgeSteep(Matrix, RandomChain(Matrix, 100));
+		Chains[3] = EdgeSteep(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][3] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
+		Initial = Alg2(Matrix, i);
+
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[4] = VertexGreedy(Matrix, Alg2(Matrix, i));
+		Chains[4] = VertexGreedy(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][4] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[5] = VertexSteep(Matrix, Alg2(Matrix, i));
+		Chains[5] = VertexSteep(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][5] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[6] = EdgeGreedy(Matrix, Alg2(Matrix, i));
+		Chains[6] = EdgeGreedy(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][6] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[7] = EdgeSteep(Matrix, Alg2(Matrix, i));
+		Chains[7] = EdgeSteep(Matrix, Initial);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][7] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
