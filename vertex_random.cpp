@@ -12,7 +12,7 @@ std::vector<int> VertexRandom(std::vector<std::vector<int>> Matrix, std::vector<
 
     auto TimeA = std::chrono::high_resolution_clock::now();
 
-    while (std::chrono::duration<size_t, std::nano>(std::chrono::high_resolution_clock::now() - TimeA).count() > timeNs)
+    while (std::chrono::duration<size_t, std::nano>(std::chrono::high_resolution_clock::now() - TimeA).count() < timeNs)
     {
         cycleNotOptimalA = localCycleRandom(Matrix, CycleA, 1, false);
         cycleNotOptimalB = localCycleRandom(Matrix, CycleB, 1, false);

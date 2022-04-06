@@ -14,7 +14,7 @@ std::vector<int> EdgeRandom(std::vector<std::vector<int>> Matrix, std::vector<in
 
     auto TimeA = std::chrono::high_resolution_clock::now();
 
-    while (std::chrono::duration<size_t, std::nano>(std::chrono::high_resolution_clock::now() - TimeA).count() > timeNs)
+    while (std::chrono::duration<size_t, std::nano>(std::chrono::high_resolution_clock::now() - TimeA).count() < timeNs)
     {
         cycleNotOptimalA = localCycleRandom(Matrix, CycleA, 1, true);
         cycleNotOptimalB = localCycleRandom(Matrix, CycleB, 1, true);
