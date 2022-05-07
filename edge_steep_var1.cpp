@@ -179,8 +179,126 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 	}
 	if (Move.Type == ExchangeType::CROSS)
 	{
+		auto &CycleA = CyclesArr[0];
+		for (int A : {Move.B})
+		{
+			for (int B : {Move.PreA, Move.PostA})
+			{
+				int Size = static_cast<int>(CycleA.size());
 
+				int AMin = A - 1 < 0 ? Size - 1 : A - 1;
+				int BMin = B - 1 < 0 ? Size - 1 : B - 1;
+
+				int AMax = A + 1 == Size ? 0 : A + 1;
+				int BMax = B + 1 == Size ? 0 : B + 1;
+
+				//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+				int Delta = Matrix[CycleA[A]][CycleA[B]] + Matrix[CycleA[AMax]][CycleA[BMax]] - Matrix[CycleA[A]][CycleA[AMax]] - Matrix[CycleA[B]][CycleA[BMax]];
+
+				if (Delta < 0)
+				{
+					BestMoves.insert(Exchange{
+						.A = A,
+						.B = B,
+						.PreA = AMin,
+						.PreB = BMin,
+						.PostA = AMax,
+						.PostB = BMax,
+						.X = CycleA[A],
+						.Y = CycleA[B],
+						.PreX = CycleA[AMin],
+						.PreY = CycleA[BMin],
+						.PostX = CycleA[AMax],
+						.PostY = CycleA[BMax],
+						.CycleIndex = 0,
+						.Delta = Delta,
+						.Type = ExchangeType::LOCAL,
+					});
+				}
+			}
+		}
+
+		auto &CycleB = CyclesArr[1];
+		for (int A : {Move.A})
+		{
+			for (int B : {Move.PreB, Move.PostB})
+			{
+				int Size = static_cast<int>(CycleB.size());
+
+				int AMin = A - 1 < 0 ? Size - 1 : A - 1;
+				int BMin = B - 1 < 0 ? Size - 1 : B - 1;
+
+				int AMax = A + 1 == Size ? 0 : A + 1;
+				int BMax = B + 1 == Size ? 0 : B + 1;
+
+				//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+				int Delta = Matrix[CycleB[A]][CycleB[B]] + Matrix[CycleB[AMax]][CycleB[BMax]] - Matrix[CycleB[A]][CycleB[AMax]] - Matrix[CycleB[B]][CycleB[BMax]];
+
+				if (Delta < 0)
+				{
+					BestMoves.insert(Exchange{
+						.A = A,
+						.B = B,
+						.PreA = AMin,
+						.PreB = BMin,
+						.PostA = AMax,
+						.PostB = BMax,
+						.X = CycleB[A],
+						.Y = CycleB[B],
+						.PreX = CycleB[AMin],
+						.PreY = CycleB[BMin],
+						.PostX = CycleB[AMax],
+						.PostY = CycleB[BMax],
+						.CycleIndex = 0,
+						.Delta = Delta,
+						.Type = ExchangeType::LOCAL,
+					});
+				}
+			}
+		}
+
+		for (int A : {Move.PreA, Move.PostA})
+		{
+			for (int B : {Move.PreB, Move.PostB})
+			{
+				int SizeA = static_cast<int>(CycleA.size());
+				int SizeB = static_cast<int>(CycleB.size());
+
+				int AMin = A - 1 < 0 ? SizeA - 1 : A - 1;
+				int BMin = B - 1 < 0 ? SizeB - 1 : B - 1;
+
+				int AMax = A + 1 == SizeA ? 0 : A + 1;
+				int BMax = B + 1 == SizeB ? 0 : B + 1;
+
+				//(A-1 to B) + (A+1 to B) + (B-1 to A) + (B+1 to A)
+				//- (A-1 to A) - (A+1 to A) - (B-1 to B) - (B+1 to B)
+				int Delta = Matrix[CycleA[AMin]][CycleB[B]] + Matrix[CycleA[AMax]][CycleB[B]] + Matrix[CycleB[BMin]][CycleA[A]] + Matrix[CycleB[BMax]][CycleA[A]] - Matrix[CycleA[AMin]][CycleA[A]] - Matrix[CycleA[AMax]][CycleA[A]] -
+							Matrix[CycleB[BMin]][CycleB[B]] - Matrix[CycleB[BMax]][CycleB[B]];
+
+				if (Delta < 0)
+				{
+					BestMoves.insert(Exchange{
+						.A = A,
+						.B = B,
+						.PreA = AMin,
+						.PreB = BMin,
+						.PostA = AMax,
+						.PostB = BMax,
+						.X = CycleA[A],
+						.Y = CycleB[B],
+						.PreX = CycleA[AMin],
+						.PreY = CycleB[BMin],
+						.PostX = CycleA[AMax],
+						.PostY = CycleB[BMax],
+						.Delta = Delta,
+						.Type = ExchangeType::CROSS,
+					});
+				}
+			}
+		}
 	}
+
+	return BestMoves;
 }
 
 std::multiset<Exchange, ExchangeCmp> Initial(const std::vector<std::vector<int>> &Matrix, const std::array<std::vector<int>, 2> &CyclesArr)
