@@ -31,6 +31,15 @@ std::vector<int> EdgeGreedy(std::vector<std::vector<int>> Matrix, std::vector<in
 std::vector<int> EdgeSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
 
 /**
+ * @brief Improved algorithm upon edge exchange. Modification - best moves list.
+ *
+ * @param Matrix Adjacency matrix
+ * @param Cycles Base solution
+ * @return std::vector<int> Improved base solution
+ */
+std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles);
+
+/**
  * @brief Return adjacent indeses from cycle.
  *
  * @param Cycle the cycle
