@@ -89,9 +89,14 @@ struct ExchangeCmp
 	}
 };
 
-std::set<Exchange, ExchangeCmp> Initial(std::vector<std::vector<int>> &Matrix, std::array<std::vector<int>, 2> &CyclesArr)
+std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int>> &Matrix, const std::array<std::vector<int>, 2> &CyclesArr, const Exchange &Move)
 {
-	std::set<Exchange, ExchangeCmp> BestMoves;
+	return std::multiset<Exchange, ExchangeCmp>();
+}
+
+std::multiset<Exchange, ExchangeCmp> Initial(const std::vector<std::vector<int>> &Matrix, const std::array<std::vector<int>, 2> &CyclesArr)
+{
+	std::multiset<Exchange, ExchangeCmp> BestMoves;
 
 	for (int i = 0; auto &&Cycle : CyclesArr)
 	{
@@ -186,23 +191,34 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
 	auto &CycleA = CyclesArr[0];
 	auto &CycleB = CyclesArr[1];
 	auto BestMoves = Initial(Matrix, CyclesArr);
+	bool Found;
 
 	do
 	{
-		for (auto Iter = BestMoves.begin(); Iter != BestMoves.end(); Iter++)
+		Found = false;
+		std::multiset<Exchange, ExchangeCmp> NewMoves;
+
+		for (auto Iter = BestMoves.begin(); Iter != BestMoves.end();)
 		{
 			if (Iter->Validate(CyclesArr) == Validity::APPLICABLE)
 			{
 				Iter->Apply(CyclesArr);
+				NewMoves.merge(SearchNew(Matrix, CyclesArr, *Iter));
+				Iter = BestMoves.erase(Iter);
+				Found = true;
 			}
-			
-			if (Iter->Validate(CyclesArr) == Validity::REJECTED)
+			else if (Iter->Validate(CyclesArr) == Validity::DELAYED)
+			{
+				Iter++;
+			}
+			else if (Iter->Validate(CyclesArr) == Validity::REJECTED)
 			{
 				Iter = BestMoves.erase(Iter);
 			}
 		}
 
-	} while (not BestMoves.empty());
+		BestMoves.merge(NewMoves);
+	} while (Found);
 
 	std::vector<int> Temp = CyclesArr[0];
 	Temp.insert(Temp.end(), CyclesArr[1].begin(), CyclesArr[1].end());
