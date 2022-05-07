@@ -136,6 +136,52 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 				}
 			}
 		}
+
+		// LOCAL-CROSS
+		{
+			auto &CycleA = CyclesArr[0];
+			auto &CycleB = CyclesArr[1];
+
+			for (int A = Move.CycleIndex == 0 ? Move.A : 0; A < (Move.CycleIndex == 0 ? Move.B : CycleA.size()); A++)
+			{
+				for (int B = Move.CycleIndex == 1 ? Move.A : 0; B < (Move.CycleIndex == 1 ? Move.B : CycleB.size()); B++)
+				{
+					int SizeA = static_cast<int>(CycleA.size());
+					int SizeB = static_cast<int>(CycleB.size());
+
+					int AMin = A - 1 < 0 ? SizeA - 1 : A - 1;
+					int BMin = B - 1 < 0 ? SizeB - 1 : B - 1;
+
+					int AMax = A + 1 == SizeA ? 0 : A + 1;
+					int BMax = B + 1 == SizeB ? 0 : B + 1;
+
+					//(A-1 to B) + (A+1 to B) + (B-1 to A) + (B+1 to A)
+					//- (A-1 to A) - (A+1 to A) - (B-1 to B) - (B+1 to B)
+					int Delta = Matrix[CycleA[AMin]][CycleB[B]] + Matrix[CycleA[AMax]][CycleB[B]] + Matrix[CycleB[BMin]][CycleA[A]] + Matrix[CycleB[BMax]][CycleA[A]] - Matrix[CycleA[AMin]][CycleA[A]] - Matrix[CycleA[AMax]][CycleA[A]] -
+								Matrix[CycleB[BMin]][CycleB[B]] - Matrix[CycleB[BMax]][CycleB[B]];
+
+					if (Delta < 0)
+					{
+						BestMoves.insert(Exchange{
+							.A = A,
+							.B = B,
+							.PreA = AMin,
+							.PreB = BMin,
+							.PostA = AMax,
+							.PostB = BMax,
+							.X = CycleA[A],
+							.Y = CycleB[B],
+							.PreX = CycleA[AMin],
+							.PreY = CycleB[BMin],
+							.PostX = CycleA[AMax],
+							.PostY = CycleB[BMax],
+							.Delta = Delta,
+							.Type = ExchangeType::CROSS,
+						});
+					}
+				}
+			}
+		}
 	}
 	if (Move.Type == ExchangeType::CROSS)
 	{
@@ -343,6 +389,13 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
 				Temp.insert(Temp.end(), CyclesArr[1].begin(), CyclesArr[1].end());
 				auto len2 = ChainLength(Temp, Matrix);
 				auto FullSearch = Initial(Matrix, CyclesArr);
+				for (auto &x : FullSearch)
+				{
+					if (x.A == 76 and x.B == 34 and x.Type == ExchangeType::CROSS)
+					{
+						int a = 3;
+					}
+				}
 
 				NewMoves.merge(SearchNew(Matrix, CyclesArr, *Iter));
 				Iter = BestMoves.erase(Iter);
