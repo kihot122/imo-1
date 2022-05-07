@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <set>
 #include <vector>
 #include "main.hpp"
 
@@ -27,7 +28,7 @@ struct Exchange
 	int Delta;
 	ExchangeType Type;
 
-	Validity Validate(std::array<std::vector<int>, 2> &CyclesArr)
+	Validity Validate(std::array<std::vector<int>, 2> &CyclesArr) const
 	{
 		switch (Type)
 		{
@@ -62,7 +63,7 @@ struct Exchange
 		}
 	}
 
-	void Apply(std::array<std::vector<int>, 2> &CyclesArr)
+	void Apply(std::array<std::vector<int>, 2> &CyclesArr) const
 	{
 		switch (Type)
 		{
@@ -80,9 +81,17 @@ struct Exchange
 	}
 };
 
-std::vector<Exchange> Initial(std::vector<std::vector<int>> &Matrix, std::array<std::vector<int>, 2> &CyclesArr)
+struct ExchangeCmp
 {
-	std::vector<Exchange> BestMoves;
+	bool operator()(const Exchange &A, const Exchange &B) const
+	{
+		return A.Delta <= B.Delta;
+	}
+};
+
+std::set<Exchange, ExchangeCmp> Initial(std::vector<std::vector<int>> &Matrix, std::array<std::vector<int>, 2> &CyclesArr)
+{
+	std::set<Exchange, ExchangeCmp> BestMoves;
 
 	for (int i = 0; auto &&Cycle : CyclesArr)
 	{
@@ -103,7 +112,7 @@ std::vector<Exchange> Initial(std::vector<std::vector<int>> &Matrix, std::array<
 
 				if (Delta < 0)
 				{
-					BestMoves.push_back(Exchange{
+					BestMoves.insert(Exchange{
 						.A = A,
 						.B = B,
 						.PreA = AMin,
@@ -148,7 +157,7 @@ std::vector<Exchange> Initial(std::vector<std::vector<int>> &Matrix, std::array<
 
 			if (Delta < 0)
 			{
-				BestMoves.push_back(Exchange{
+				BestMoves.insert(Exchange{
 					.A = A,
 					.B = B,
 					.PreA = AMin,
@@ -161,13 +170,13 @@ std::vector<Exchange> Initial(std::vector<std::vector<int>> &Matrix, std::array<
 					.PreY = CycleB[BMin],
 					.PostX = CycleA[AMax],
 					.PostY = CycleB[BMax],
+					.Delta = Delta,
 					.Type = ExchangeType::CROSS,
 				});
 			}
 		}
 	}
 
-	std::sort(BestMoves.begin(), BestMoves.end(), [](auto &X, auto &Y) { return X.Delta < Y.Delta; });
 	return BestMoves;
 }
 
@@ -176,15 +185,20 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
 	std::array CyclesArr = {std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
 	auto &CycleA = CyclesArr[0];
 	auto &CycleB = CyclesArr[1];
-	std::vector<Exchange> BestMoves = Initial(Matrix, CyclesArr);
+	auto BestMoves = Initial(Matrix, CyclesArr);
 
 	do
 	{
-		for (auto &Move : BestMoves)
+		for (auto Iter = BestMoves.begin(); Iter != BestMoves.end(); Iter++)
 		{
-			if (Move.Validate(CyclesArr) == Validity::APPLICABLE)
+			if (Iter->Validate(CyclesArr) == Validity::APPLICABLE)
 			{
-				Move.Apply(CyclesArr);
+				Iter->Apply(CyclesArr);
+			}
+			
+			if (Iter->Validate(CyclesArr) == Validity::REJECTED)
+			{
+				Iter = BestMoves.erase(Iter);
 			}
 		}
 
