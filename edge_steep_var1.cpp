@@ -8,12 +8,76 @@ enum class ExchangeType : bool
 	CROSS,
 };
 
+enum class Validity : uint8_t
+{
+	APPLICABLE,
+	DELAYED,
+	REJECTED,
+};
+
 struct Exchange
 {
-	int ChoiceA, ChoiceB;
+	int A, B;
+	int PreA, PreB;
+	int PostA, PostB;
+	int X, Y;
+	int PreX, PreY;
+	int PostX, PostY;
 	int CycleIndex;
 	int Delta;
 	ExchangeType Type;
+
+	Validity Validate(std::array<std::vector<int>, 2> &CyclesArr)
+	{
+		switch (Type)
+		{
+			case ExchangeType::LOCAL:
+			{
+				auto &Cycle = CyclesArr[CycleIndex];
+
+				if (Cycle[A] == X and Cycle[B] == Y and Cycle[PostA] == PostX and Cycle[PostB] == PostY)
+					return Validity::APPLICABLE;
+
+				if (Cycle[A] == PostX and Cycle[B] == PostY and Cycle[PostA] == X and Cycle[PostB] == Y)
+					return Validity::APPLICABLE;
+
+				if (Cycle[A] == PostX and Cycle[B] == Y and Cycle[PostA] == X and Cycle[PostB] == PostY)
+					return Validity::DELAYED;
+
+				if (Cycle[A] == X and Cycle[B] == PostY and Cycle[PostA] == PostX and Cycle[PostB] == Y)
+					return Validity::DELAYED;
+
+				return Validity::REJECTED;
+			}
+			case ExchangeType::CROSS:
+			{
+				auto &CycleA = CyclesArr[0];
+				auto &CycleB = CyclesArr[1];
+
+				if (CycleA[A] == X and CycleB[B] == Y and CycleA[PostA] == PostX and CycleB[PostB] == PostY and CycleA[PreA] == PreX and CycleB[PreB] == PreY)
+					return Validity::APPLICABLE;
+
+				return Validity::REJECTED;
+			}
+		}
+	}
+
+	void Apply(std::array<std::vector<int>, 2> &CyclesArr)
+	{
+		switch (Type)
+		{
+			case ExchangeType::LOCAL:
+			{
+				std::reverse(CyclesArr[CycleIndex].begin() + A + 1, CyclesArr[CycleIndex].begin() + B + 1);
+				break;
+			}
+			case ExchangeType::CROSS:
+			{
+				std::swap(CyclesArr[0][A], CyclesArr[1][B]);
+				break;
+			}
+		}
+	}
 };
 
 std::vector<Exchange> Initial(std::vector<std::vector<int>> &Matrix, std::array<std::vector<int>, 2> &CyclesArr)
@@ -40,8 +104,18 @@ std::vector<Exchange> Initial(std::vector<std::vector<int>> &Matrix, std::array<
 				if (Delta < 0)
 				{
 					BestMoves.push_back(Exchange{
-						.ChoiceA = A,
-						.ChoiceB = B,
+						.A = A,
+						.B = B,
+						.PreA = AMin,
+						.PreB = BMin,
+						.PostA = AMax,
+						.PostB = BMax,
+						.X = Cycle[A],
+						.Y = Cycle[B],
+						.PreX = Cycle[AMin],
+						.PreY = Cycle[BMin],
+						.PostX = Cycle[AMax],
+						.PostY = Cycle[BMax],
 						.CycleIndex = i,
 						.Delta = Delta,
 						.Type = ExchangeType::LOCAL,
@@ -75,9 +149,18 @@ std::vector<Exchange> Initial(std::vector<std::vector<int>> &Matrix, std::array<
 			if (Delta < 0)
 			{
 				BestMoves.push_back(Exchange{
-					.ChoiceA = A,
-					.ChoiceB = B,
-					.Delta = Delta,
+					.A = A,
+					.B = B,
+					.PreA = AMin,
+					.PreB = BMin,
+					.PostA = AMax,
+					.PostB = BMax,
+					.X = CycleA[A],
+					.Y = CycleB[B],
+					.PreX = CycleA[AMin],
+					.PreY = CycleB[BMin],
+					.PostX = CycleA[AMax],
+					.PostY = CycleB[BMax],
 					.Type = ExchangeType::CROSS,
 				});
 			}
@@ -97,6 +180,13 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
 
 	do
 	{
+		for (auto &Move : BestMoves)
+		{
+			if (Move.Validate(CyclesArr) == Validity::APPLICABLE)
+			{
+				Move.Apply(CyclesArr);
+			}
+		}
 
 	} while (not BestMoves.empty());
 
