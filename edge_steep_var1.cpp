@@ -185,6 +185,94 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 	}
 	if (Move.Type == ExchangeType::CROSS)
 	{
+		// CROSS-LOCAL
+		{
+			auto &Cycle = CyclesArr[0];
+			for (int A : {Move.PreA, Move.A})
+			{
+				for (int B = 0; B < Cycle.size(); B++)
+				{
+					if (A == B)
+						continue;
+
+					int Size = static_cast<int>(Cycle.size());
+
+					int AMin = A - 1 < 0 ? Size - 1 : A - 1;
+					int BMin = B - 1 < 0 ? Size - 1 : B - 1;
+
+					int AMax = A + 1 == Size ? 0 : A + 1;
+					int BMax = B + 1 == Size ? 0 : B + 1;
+
+					//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+					int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
+
+					if (Delta < 0)
+					{
+						BestMoves.insert(Exchange{
+							.A = A,
+							.B = B,
+							.PreA = AMin,
+							.PreB = BMin,
+							.PostA = AMax,
+							.PostB = BMax,
+							.X = Cycle[A],
+							.Y = Cycle[B],
+							.PreX = Cycle[AMin],
+							.PreY = Cycle[BMin],
+							.PostX = Cycle[AMax],
+							.PostY = Cycle[BMax],
+							.CycleIndex = 0,
+							.Delta = Delta,
+							.Type = ExchangeType::LOCAL,
+						});
+					}
+				}
+			}
+		}
+		{
+			auto &Cycle = CyclesArr[1];
+			for (int A : {Move.PreB, Move.B})
+			{
+				for (int B = 0; B < Cycle.size(); B++)
+				{
+					if (A == B)
+						continue;
+
+					int Size = static_cast<int>(Cycle.size());
+
+					int AMin = A - 1 < 0 ? Size - 1 : A - 1;
+					int BMin = B - 1 < 0 ? Size - 1 : B - 1;
+
+					int AMax = A + 1 == Size ? 0 : A + 1;
+					int BMax = B + 1 == Size ? 0 : B + 1;
+
+					//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+					int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
+
+					if (Delta < 0)
+					{
+						BestMoves.insert(Exchange{
+							.A = A,
+							.B = B,
+							.PreA = AMin,
+							.PreB = BMin,
+							.PostA = AMax,
+							.PostB = BMax,
+							.X = Cycle[A],
+							.Y = Cycle[B],
+							.PreX = Cycle[AMin],
+							.PreY = Cycle[BMin],
+							.PostX = Cycle[AMax],
+							.PostY = Cycle[BMax],
+							.CycleIndex = 1,
+							.Delta = Delta,
+							.Type = ExchangeType::LOCAL,
+						});
+					}
+				}
+			}
+		}
+
 		// CROSS-CROSS
 		{
 			auto &CycleA = CyclesArr[0];
@@ -368,8 +456,6 @@ std::multiset<Exchange, ExchangeCmp> Initial(const std::vector<std::vector<int>>
 
 std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles)
 {
-	auto len = ChainLength(Cycles, Matrix);
-
 	std::array CyclesArr = {std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
 	auto BestMoves = Initial(Matrix, CyclesArr);
 	bool Found;
@@ -384,30 +470,7 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
 		{
 			if (Iter->Validate(CyclesArr) == Validity::APPLICABLE)
 			{
-				///
-				if (Initial(Matrix, CyclesArr).begin()->Delta != Iter->Delta)
-				{
-					int a = 3;
-				}
-				///
-
 				Iter->Apply(CyclesArr);
-
-				///
-				std::vector<int> Temp = CyclesArr[0];
-				Temp.insert(Temp.end(), CyclesArr[1].begin(), CyclesArr[1].end());
-				auto len2 = ChainLength(Temp, Matrix);
-				auto FullSearch = Initial(Matrix, CyclesArr);
-				for (auto &x : FullSearch)
-				{
-					if (x.A == 92 and x.B == 95 and x.Type == ExchangeType::LOCAL)
-					{
-						int a = 3;
-					}
-				}
-				LastMove = *Iter;
-				///
-
 				NewMoves.merge(SearchNew(Matrix, CyclesArr, *Iter));
 				Iter = BestMoves.erase(Iter);
 				Found = true;
