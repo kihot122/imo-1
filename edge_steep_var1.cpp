@@ -95,51 +95,57 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 
 	if (Move.Type == ExchangeType::LOCAL)
 	{
-		auto &Cycle = CyclesArr[Move.CycleIndex];
-
-		for (int A : {Move.A, Move.A + 1})
+		// LOCAL-LOCAL
 		{
-			for (int B = A + 1; B < Cycle.size(); B++)
+			auto &Cycle = CyclesArr[Move.CycleIndex];
+			for (int A = Move.PostA; A < Move.B; A++)
 			{
-				int Size = static_cast<int>(Cycle.size());
-
-				int AMin = A - 1 < 0 ? Size - 1 : A - 1;
-				int BMin = B - 1 < 0 ? Size - 1 : B - 1;
-
-				int AMax = A + 1 == Size ? 0 : A + 1;
-				int BMax = B + 1 == Size ? 0 : B + 1;
-
-				//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
-				int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
-
-				if (Delta < 0)
+				for (int B = A + 1; B < Move.B; B++)
 				{
-					BestMoves.insert(Exchange{
-						.A = A,
-						.B = B,
-						.PreA = AMin,
-						.PreB = BMin,
-						.PostA = AMax,
-						.PostB = BMax,
-						.X = Cycle[A],
-						.Y = Cycle[B],
-						.PreX = Cycle[AMin],
-						.PreY = Cycle[BMin],
-						.PostX = Cycle[AMax],
-						.PostY = Cycle[BMax],
-						.CycleIndex = Move.CycleIndex,
-						.Delta = Delta,
-						.Type = ExchangeType::LOCAL,
-					});
+					int Size = static_cast<int>(Cycle.size());
+
+					int AMin = A - 1 < 0 ? Size - 1 : A - 1;
+					int BMin = B - 1 < 0 ? Size - 1 : B - 1;
+
+					int AMax = A + 1 == Size ? 0 : A + 1;
+					int BMax = B + 1 == Size ? 0 : B + 1;
+
+					//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+					int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
+
+					if (Delta < 0)
+					{
+						BestMoves.insert(Exchange{
+							.A = A,
+							.B = B,
+							.PreA = AMin,
+							.PreB = BMin,
+							.PostA = AMax,
+							.PostB = BMax,
+							.X = Cycle[A],
+							.Y = Cycle[B],
+							.PreX = Cycle[AMin],
+							.PreY = Cycle[BMin],
+							.PostX = Cycle[AMax],
+							.PostY = Cycle[BMax],
+							.CycleIndex = Move.CycleIndex,
+							.Delta = Delta,
+							.Type = ExchangeType::LOCAL,
+						});
+					}
 				}
 			}
 		}
-
-		auto &CycleA = CyclesArr[0];
-		auto &CycleB = CyclesArr[1];
-		for (int A : {Move.A, Move.PostA})
+	}
+	if (Move.Type == ExchangeType::CROSS)
+	{
+		// CROSS-CROSS
 		{
-			for (int B : {Move.B, Move.PostB})
+			auto &CycleA = CyclesArr[0];
+			auto &CycleB = CyclesArr[1];
+			auto &A = Move.A;
+
+			for (int B = 0; B < CycleB.size(); B++)
 			{
 				int SizeA = static_cast<int>(CycleA.size());
 				int SizeB = static_cast<int>(CycleB.size());
@@ -176,90 +182,12 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 				}
 			}
 		}
-	}
-	if (Move.Type == ExchangeType::CROSS)
-	{
-		auto &CycleA = CyclesArr[0];
-		for (int A : {Move.B})
 		{
-			for (int B : {Move.PreA, Move.PostA})
-			{
-				int Size = static_cast<int>(CycleA.size());
+			auto &CycleA = CyclesArr[0];
+			auto &CycleB = CyclesArr[1];
+			auto &B = Move.B;
 
-				int AMin = A - 1 < 0 ? Size - 1 : A - 1;
-				int BMin = B - 1 < 0 ? Size - 1 : B - 1;
-
-				int AMax = A + 1 == Size ? 0 : A + 1;
-				int BMax = B + 1 == Size ? 0 : B + 1;
-
-				//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
-				int Delta = Matrix[CycleA[A]][CycleA[B]] + Matrix[CycleA[AMax]][CycleA[BMax]] - Matrix[CycleA[A]][CycleA[AMax]] - Matrix[CycleA[B]][CycleA[BMax]];
-
-				if (Delta < 0)
-				{
-					BestMoves.insert(Exchange{
-						.A = A,
-						.B = B,
-						.PreA = AMin,
-						.PreB = BMin,
-						.PostA = AMax,
-						.PostB = BMax,
-						.X = CycleA[A],
-						.Y = CycleA[B],
-						.PreX = CycleA[AMin],
-						.PreY = CycleA[BMin],
-						.PostX = CycleA[AMax],
-						.PostY = CycleA[BMax],
-						.CycleIndex = 0,
-						.Delta = Delta,
-						.Type = ExchangeType::LOCAL,
-					});
-				}
-			}
-		}
-
-		auto &CycleB = CyclesArr[1];
-		for (int A : {Move.A})
-		{
-			for (int B : {Move.PreB, Move.PostB})
-			{
-				int Size = static_cast<int>(CycleB.size());
-
-				int AMin = A - 1 < 0 ? Size - 1 : A - 1;
-				int BMin = B - 1 < 0 ? Size - 1 : B - 1;
-
-				int AMax = A + 1 == Size ? 0 : A + 1;
-				int BMax = B + 1 == Size ? 0 : B + 1;
-
-				//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
-				int Delta = Matrix[CycleB[A]][CycleB[B]] + Matrix[CycleB[AMax]][CycleB[BMax]] - Matrix[CycleB[A]][CycleB[AMax]] - Matrix[CycleB[B]][CycleB[BMax]];
-
-				if (Delta < 0)
-				{
-					BestMoves.insert(Exchange{
-						.A = A,
-						.B = B,
-						.PreA = AMin,
-						.PreB = BMin,
-						.PostA = AMax,
-						.PostB = BMax,
-						.X = CycleB[A],
-						.Y = CycleB[B],
-						.PreX = CycleB[AMin],
-						.PreY = CycleB[BMin],
-						.PostX = CycleB[AMax],
-						.PostY = CycleB[BMax],
-						.CycleIndex = 0,
-						.Delta = Delta,
-						.Type = ExchangeType::LOCAL,
-					});
-				}
-			}
-		}
-
-		for (int A : {Move.PreA, Move.PostA})
-		{
-			for (int B : {Move.PreB, Move.PostB})
+			for (int A = 0; A < CycleA.size(); A++)
 			{
 				int SizeA = static_cast<int>(CycleA.size());
 				int SizeB = static_cast<int>(CycleB.size());
@@ -394,9 +322,9 @@ std::multiset<Exchange, ExchangeCmp> Initial(const std::vector<std::vector<int>>
 
 std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles)
 {
+	auto len = ChainLength(Cycles, Matrix);
+
 	std::array CyclesArr = {std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
-	auto &CycleA = CyclesArr[0];
-	auto &CycleB = CyclesArr[1];
 	auto BestMoves = Initial(Matrix, CyclesArr);
 	bool Found;
 
@@ -410,6 +338,12 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
 			if (Iter->Validate(CyclesArr) == Validity::APPLICABLE)
 			{
 				Iter->Apply(CyclesArr);
+
+				std::vector<int> Temp = CyclesArr[0];
+				Temp.insert(Temp.end(), CyclesArr[1].begin(), CyclesArr[1].end());
+				auto len2 = ChainLength(Temp, Matrix);
+				auto FullSearch = Initial(Matrix, CyclesArr);
+
 				NewMoves.merge(SearchNew(Matrix, CyclesArr, *Iter));
 				Iter = BestMoves.erase(Iter);
 				Found = true;
