@@ -153,9 +153,9 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 
 				if (secondInCycleA && firstInCycleA)
 				{
-					locDelta = localMoveDelta(Matrix, CycleA, i, candidates[i][j]);
-					locChoiceA = preInCycle(i, CycleA.size());
-					locChoiceB = preInCycle(candidates[i][j], CycleA.size());
+					locDelta = localMoveDelta(Matrix, CycleA, firstInCycleIndex, secondInCycleIndex);
+					locChoiceA = preInCycle(firstInCycleIndex, CycleA.size());
+					locChoiceB = preInCycle(secondInCycleIndex, CycleA.size());
 					locDeltaOther = localMoveDelta(Matrix, CycleA, locChoiceA, locChoiceB);
 					if (locDelta > locDeltaOther)
 					{
@@ -163,17 +163,17 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 					}
 					else
 					{
-						locChoiceA = i;
-						locChoiceB = candidates[i][j];
+						locChoiceA = firstInCycleIndex;
+						locChoiceB = secondInCycleIndex;
 					}
 
 					locMoveType = ExchangeType2::LOCAL_A;
 				}
 				else if (not(secondInCycleA) && not(firstInCycleA))
 				{
-					locDelta = localMoveDelta(Matrix, CycleB, i, candidates[i][j]);
-					preA = preInCycle(i, CycleB.size());
-					preB = preInCycle(candidates[i][j], CycleB.size());
+					locDelta = localMoveDelta(Matrix, CycleB, firstInCycleIndex, secondInCycleIndex);
+					preA = preInCycle(firstInCycleIndex, CycleB.size());
+					preB = preInCycle(secondInCycleIndex, CycleB.size());
 					locDeltaOther = localMoveDelta(Matrix, CycleB, preA, preB);
 					if (locDelta > locDeltaOther)
 					{
@@ -183,8 +183,8 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 					}
 					else
 					{
-						locChoiceA = i;
-						locChoiceB = candidates[i][j];
+						locChoiceA = firstInCycleIndex;
+						locChoiceB = secondInCycleIndex;
 					}
 
 					locMoveType = ExchangeType2::LOCAL_B;
@@ -193,21 +193,21 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 				{
 					if (firstInCycleA)
 					{
-						preA = preInCycle(i, CycleA.size());
-						postA = postInCycle(i, CycleA.size());
-						preB = preInCycle(i, CycleB.size());
-						postB = postInCycle(i, CycleB.size());
+						preA = preInCycle(firstInCycleIndex, CycleA.size());
+						postA = postInCycle(firstInCycleIndex, CycleA.size());
+						preB = preInCycle(secondInCycleIndex, CycleB.size());
+						postB = postInCycle(secondInCycleIndex, CycleB.size());
 					}
 					else
 					{
-						preA = preInCycle(i, CycleB.size());
-						postA = postInCycle(i, CycleB.size());
-						preB = preInCycle(i, CycleA.size());
-						postB = postInCycle(i, CycleA.size());
+						preA = preInCycle(firstInCycleIndex, CycleB.size());
+						postA = postInCycle(firstInCycleIndex, CycleB.size());
+						preB = preInCycle(secondInCycleIndex, CycleA.size());
+						postB = postInCycle(secondInCycleIndex, CycleA.size());
 					}
 
-					iter = {i, preB, i, postB, preA, candidates[i][j], preA, candidates[i][j]};
-					for (int iteri = 0; i < iter.size(); i += 2)
+					iter = {firstInCycleIndex, preB, firstInCycleIndex, postB, preA, secondInCycleIndex, preA, secondInCycleIndex};
+					for (int iteri = 0; iteri < iter.size(); iteri += 2)
 					{
 						locDeltaOther = crossMoveDelta(Matrix, CycleA, CycleB, iter[iteri], iter[iteri + 1]);
 
