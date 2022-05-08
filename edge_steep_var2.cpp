@@ -1,35 +1,11 @@
 #include <algorithm>
 #include <set>
 #include <vector>
+#include <iostream>
 #include "main.hpp"
 #include <stdlib.h>
 #include <time.h>
 
-// // not tested
-// std::vector<int> getClosests(int from_index, std::vector<std::vector<int>> &Matrix, int count)
-// {
-
-//     std::vector<int> clasestsIndexes(count, UINT16_MAX);
-//     bool replaced = true;
-//     int maxElementIndex;
-
-//     for (int i; i < Matrix[from_index].size(); i++)
-//     {
-//         if (replaced)
-//         {
-//             maxElementIndex = std::max_element(clasestsIndexes.begin(),clasestsIndexes.end()) - clasestsIndexes.begin();
-//             replaced = false;
-//         }
-
-//         if (Matrix[from_index][i] < clasestsIndexes[maxElementIndex])
-//         {
-//             clasestsIndexes[maxElementIndex] = Matrix[from_index][i];
-//             replaced = true;
-//         }
-//     }
-
-//     return clasestsIndexes;
-// }
 
 int preInCycle(int n, int size)
 {
@@ -125,6 +101,10 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 
 	while (true)
 	{
+		minDelta = 0;
+		locDelta = 0; 
+		locDeltaOther = 0;
+
 		for (int i = 0; i < candidates.size(); i++)
 		{
 			firstInCycleIndex = std::find(CycleA.begin(), CycleA.end(), i) - CycleA.begin();
@@ -231,6 +211,9 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 				}
 			}
 		}
+		
+		std::cout << minChoiceA << std::endl;
+		std::cout << minChoiceB << std::endl;
 
 		if (minDelta < 0)
 		{
