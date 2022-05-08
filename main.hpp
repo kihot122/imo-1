@@ -46,7 +46,7 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
  * @param Cycles Base solution
  * @return std::vector<int> Improved base solution
  */
-std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector<int> &Cycles, int candidatesCount=10);
+std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int candidatesCount = 10);
 
 /**
  * @brief Return adjacent indeses from cycle.
@@ -57,4 +57,3 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
  * @return array of previous, pointed and next value of specified by given index
  **/
 std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex);
-
