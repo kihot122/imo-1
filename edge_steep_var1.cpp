@@ -110,7 +110,7 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 					int AMax = A + 1 == Size ? 0 : A + 1;
 					int BMax = B + 1 == Size ? 0 : B + 1;
 
-					//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+					//(A to B) + (A+1 to B+1) - (A to A+1) - (B to B+1)
 					int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
 
 					if (Delta < 0)
@@ -203,7 +203,7 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 					int AMax = A + 1 == Size ? 0 : A + 1;
 					int BMax = B + 1 == Size ? 0 : B + 1;
 
-					//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+					//(A to B) + (A+1 to B+1) - (A to A+1) - (B to B+1)
 					int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
 
 					if (Delta < 0)
@@ -246,7 +246,7 @@ std::multiset<Exchange, ExchangeCmp> SearchNew(const std::vector<std::vector<int
 					int AMax = A + 1 == Size ? 0 : A + 1;
 					int BMax = B + 1 == Size ? 0 : B + 1;
 
-					//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+					//(A to B) + (A+1 to B+1) - (A to A+1) - (B to B+1)
 					int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
 
 					if (Delta < 0)
@@ -381,7 +381,7 @@ std::multiset<Exchange, ExchangeCmp> Initial(const std::vector<std::vector<int>>
 				int AMax = A + 1 == Size ? 0 : A + 1;
 				int BMax = B + 1 == Size ? 0 : B + 1;
 
-				//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
+				//(A to B) + (A+1 to B+1) - (A to A+1) - (B to B+1)
 				int Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
 
 				if (Delta < 0)
