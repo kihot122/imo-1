@@ -464,7 +464,6 @@ std::vector<int> EdgeSteepVar1(std::vector<std::vector<int>> Matrix, std::vector
 	{
 		Found = false;
 		std::multiset<Exchange, ExchangeCmp> NewMoves;
-		Exchange LastMove;
 
 		for (auto Iter = BestMoves.begin(); Iter != BestMoves.end();)
 		{
