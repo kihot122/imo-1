@@ -74,14 +74,14 @@ int crossMoveDelta(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycl
         Matrix[CycleA[AMin]][CycleA[A]] - Matrix[CycleA[AMax]][CycleA[A]] - Matrix[CycleB[BMin]][CycleB[B]] - Matrix[CycleB[BMax]][CycleB[B]];
 }
 
-enum class ExchangeType
+enum ExchangeType
 {
 	LOCAL_A,
 	LOCAL_B,
 	CROSS
 };
 
-std::vector<int> edgeSteepVar1(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles, int candidatesCount = 10)
+std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector<int> &Cycles, int candidatesCount)
 {
     std::vector<std::vector<int>> candidates;
     candidates.resize(Matrix.size(), std::vector<int>(candidatesCount));
