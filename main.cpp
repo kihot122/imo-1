@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
 		size_t MaxTime = (*std::max_element(Times.begin(), Times.end(), [&i](auto &a, auto &b) { return a[i] < b[i]; }))[i];
 		size_t MinTime = (*std::min_element(Times.begin(), Times.end(), [&i](auto &a, auto &b) { return a[i] < b[i]; }))[i];
-		size_t AvgTime = (std::accumulate(Times.begin(), Times.end(), 0, [&i](auto &&acc, auto &&ref) { return acc + ref[i]; }) / 100);
+		size_t AvgTime = (std::accumulate(Times.begin(), Times.end(), (size_t)0, [&i](auto &&acc, auto &&ref) { return acc + ref[i]; }) / 100);
 
 		WriteChain(BestChain[i], Positions, "Chain-" + std::to_string(i));
 		FileResults << MaxLength << " " << MinLength << " " << AvgLength << std::endl;
