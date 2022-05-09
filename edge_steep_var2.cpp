@@ -70,7 +70,7 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 	for (int i = 0; i < candidatesCount; i++)
 	{
 		ix = candidates.size()-i-1;
-		candidates[ix].erase(candidates[ix].end()-9+i,candidates[ix].end());
+		candidates[ix].erase(candidates[ix].end()-candidatesCount+1+i,candidates[ix].end());
 	}
 
 	for (int i = 0; i < Matrix.size() - 1; i++)
@@ -261,7 +261,7 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 		}
 		else
 		{
-			// break;
+			break;
 		}
 
 		// if (ci > 100000)
