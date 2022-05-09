@@ -57,7 +57,7 @@ enum class ExchangeType2
 std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int candidatesCount)
 {
 	std::vector<std::vector<int>> candidates;
-	candidates.resize(Matrix.size(), std::vector<int>(candidatesCount));
+	candidates.resize(Matrix.size()-1, std::vector<int>(candidatesCount, INT32_MAX));
 
 	auto CycleA = std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2);
 	auto CycleB = std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end());
@@ -66,6 +66,12 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 	int maxElementIndex;
 
 	srand(time(NULL));
+	int ix;
+	for (int i = 0; i < candidatesCount; i++)
+	{
+		ix = candidates.size()-i-1;
+		candidates[ix].erase(candidates[ix].end()-9+i,candidates[ix].end());
+	}
 
 	for (int i = 0; i < Matrix.size() - 1; i++)
 	{
@@ -79,7 +85,7 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 
 			if (Matrix[i][j] < candidates[i][maxElementIndex])
 			{
-				candidates[i][maxElementIndex] = Matrix[i][j];
+				candidates[i][maxElementIndex] = j;
 				replaced = true;
 			}
 		}
@@ -99,8 +105,12 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 	int preA, preB, postA, postB;
 	std::vector<int> iter;
 
+	int c = 0;
+	int ci = 0;
+
 	while (true)
 	{
+		c++;
 		minDelta = 0;
 		locDelta = 0; 
 		locDeltaOther = 0;
@@ -120,6 +130,7 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 
 			for (int j = 0; j < candidates[i].size(); j++)
 			{
+				ci++;
 				secondInCycleIndex = std::find(CycleA.begin(), CycleA.end(), candidates[i][j]) - CycleA.begin();
 				if (secondInCycleIndex == CycleA.size())
 				{
@@ -186,7 +197,7 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 						postB = postInCycle(secondInCycleIndex, CycleA.size());
 					}
 
-					iter = {firstInCycleIndex, preB, firstInCycleIndex, postB, preA, secondInCycleIndex, preA, secondInCycleIndex};
+					iter = {firstInCycleIndex, preB, firstInCycleIndex, postB, preA, secondInCycleIndex, postA, secondInCycleIndex};
 					for (int iteri = 0; iteri < iter.size(); iteri += 2)
 					{
 						locDeltaOther = crossMoveDelta(Matrix, CycleA, CycleB, iter[iteri], iter[iteri + 1]);
@@ -212,20 +223,32 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 			}
 		}
 		
-		std::cout << minChoiceA << std::endl;
-		std::cout << minChoiceB << std::endl;
-
+		// std::cout << minChoiceA << std::endl;
+		// std::cout << minChoiceB << std::endl;
+		// std::cout << minDelta << std::endl;
 		if (minDelta < 0)
 		{
 			switch (minMoveType)
 			{
 				case ExchangeType2::LOCAL_A:
 				{
+					if (minChoiceA > minChoiceB) 
+					{
+						std::reverse(CycleA.begin() + minChoiceB + 1, CycleA.begin() + minChoiceA + 1);
+						break;
+					}
+						
 					std::reverse(CycleA.begin() + minChoiceA + 1, CycleA.begin() + minChoiceB + 1);
 					break;
 				}
 				case ExchangeType2::LOCAL_B:
 				{
+					if (minChoiceA > minChoiceB)
+					{
+						std::reverse(CycleB.begin() + minChoiceB + 1, CycleB.begin() + minChoiceA + 1);
+						break;
+					} 
+						
 					std::reverse(CycleB.begin() + minChoiceA + 1, CycleB.begin() + minChoiceB + 1);
 					break;
 				}
@@ -238,9 +261,15 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 		}
 		else
 		{
-			break;
+			// break;
 		}
+
+		// if (ci > 100000)
+		// 	break;
 	}
+
+	// std::cout << "C: " << c << std::endl;
+	// std::cout << "Ci: " << ci << std::endl;
 
 	std::vector<int> ret = CycleA;
 	ret.insert(ret.end(), CycleB.begin(), CycleB.end());
