@@ -9,7 +9,6 @@ enum class ExchangeType : bool
 
 std::vector<int> VertexSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles)
 {
-	std::array Test{2, 3};
 	std::array CyclesArr{std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
 	auto &CycleA = CyclesArr[0];
 	auto &CycleB = CyclesArr[1];
