@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include "main.hpp"
 
 enum class ExchangeType : bool
@@ -9,7 +10,7 @@ enum class ExchangeType : bool
 
 std::vector<int> EdgeSteep(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles)
 {
-	std::array CyclesArr = {std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
+	std::array CyclesArr{std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
 	auto &CycleA = CyclesArr[0];
 	auto &CycleB = CyclesArr[1];
 

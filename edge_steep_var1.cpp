@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <set>
 #include <vector>
 #include "main.hpp"
