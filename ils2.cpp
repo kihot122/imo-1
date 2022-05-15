@@ -165,7 +165,7 @@ void ILSDestroyRepair::destroyRepairPerturbation(std::vector<std::vector<int>> &
     int toDeleteIx;
     int toDelete;
 
-    srand(time(NULL));
+    srand(time(NULL) + rand());
 
     for (int i = 0; i < deleteQuantity; i++)
     {

@@ -34,17 +34,17 @@ int main(int argc, char **argv)
 		auto Initial = Alg2(Matrix);
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[0] = msls(Matrix); // Placeholder <- MSLS goes here
+		Chains[0] = msls(Matrix);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][0] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[1] = EdgeSteepIteratedVar1(Matrix, Initial);
+		Chains[1] = EdgeSteepIteratedVar1(Matrix, Initial, 0.013, 1000000);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][1] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[2] = ILSBD.ils(Matrix, Initial, 0.13, 1000000); // Placeholder <- ILS2 goes here
+		Chains[2] = ILSBD.ils(Matrix, Initial, 0.013, 1000000); 
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 

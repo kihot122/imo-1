@@ -1,9 +1,11 @@
 #include <algorithm>
 #include <random>
 #include <ranges>
+#include <chrono>
 #include "main.hpp"
+#include <iostream>
 
-VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries)
+VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, double timeS, int Tries)
 {
 	std::random_device Rand;
 	std::default_random_engine Engine(Rand());
@@ -13,9 +15,14 @@ VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries)
 
 	auto Current = EdgeSteep(Matrix, Cycles);
 	auto CurrentLength = ChainLength(Current, Matrix);
-
+	auto TimeBefore = std::chrono::high_resolution_clock::now();
 	for (int i : std::views::iota(0, Tries))
 	{
+		if (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - TimeBefore).count() >= timeS)
+		{
+			break;
+		}
+
 		auto Next = Current;
 		std::shuffle(Range.begin(), Range.end(), Engine);
 		// Exchange 3 vertices
