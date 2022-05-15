@@ -213,7 +213,7 @@ int ILSDestroyRepair::cyclesLength(std::vector<std::vector<int>> &Matrix, std::v
 	return Length;
 }
 
-std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double timeS)
+std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double timeS, int iterations)
 {
     std::vector<int> x = cycles;
     std::vector<int> y = cycles;
@@ -221,9 +221,14 @@ std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std
     edgeSteep(matrix, x);
 
     auto TimeBefore = std::chrono::high_resolution_clock::now();
-    
+    int c = 0;
     while (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - TimeBefore).count() <= timeS)
     {
+        if (c >= iterations)
+        {
+            break;
+        }
+
         y = x;
 
         destroyRepairPerturbation(matrix, y);
@@ -231,9 +236,10 @@ std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std
 
         if (cyclesLength(matrix, x) > cyclesLength(matrix, y))
         {
-            std::cout << "UPDATE" << "\n";
+            // std::cout << "UPDATE" << "\n";
             x = y;
         }
+        c++;
     }
 
     return x;

@@ -23,6 +23,8 @@ int main(int argc, char **argv)
 	auto TimeA = std::chrono::high_resolution_clock::now();
 	auto TimeB = std::chrono::high_resolution_clock::now();
 
+	ILSDestroyRepair ILSBD = ILSDestroyRepair();
+
 	for (size_t i : std::views::iota(0, Tries))
 	{
 		std::array<std::vector<int>, ChainNum> Chains;
@@ -41,7 +43,7 @@ int main(int argc, char **argv)
 		Times[i][1] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[2] = EdgeSteep(Matrix, Initial); // Placeholder <- ILS2 goes here
+		Chains[2] = ILSBD.ils(Matrix, Initial); // Placeholder <- ILS2 goes here
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 

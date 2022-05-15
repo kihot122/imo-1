@@ -65,12 +65,12 @@ std::array<int, 3> getFromCyclePrevMiddleNext(VCycle &Cycle, int MiddleIndex);
 
 class ILSDestroyRepair
 {
-public:
+private:
     enum class ExchangeType : bool;
     void edgeSteep(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
     void nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &Cycles, std::vector<bool> &left, int notAssigned);
     void destroyRepairPerturbation(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles, float destroyRatio = 0.2);
     int cyclesLength(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
 public:
-    std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time);
+    std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time=3600, int iterations = 100);
 };
