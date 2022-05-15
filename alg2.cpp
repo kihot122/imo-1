@@ -9,7 +9,7 @@ std::vector<int> Alg2(std::vector<std::vector<int>> Matrix, int StartNode)
 	std::random_device Rand;
 
 	std::default_random_engine Engine(Rand());
-	std::uniform_int_distribution<> Dist(0, Matrix.size() - 1);
+	std::uniform_int_distribution Dist((size_t)0, Matrix.size() - 1);
 
 	std::set<int> AvailableNodes;
 	for (int i = 0; i < Matrix.size(); i++)
