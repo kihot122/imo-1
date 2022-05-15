@@ -74,3 +74,5 @@ private:
 public:
     std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time=3600, int iterations = 100);
 };
+
+std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS = 3600, int iterations = 100);

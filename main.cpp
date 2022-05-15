@@ -14,6 +14,7 @@ int main(int argc, char **argv)
 	const int ChainNum = 3;
 	const int Tries = 10;
 
+
 	std::array<std::array<int, ChainNum>, Tries> Results;
 	std::array<std::array<size_t, ChainNum>, Tries> Times;
 	std::array<int, ChainNum> BestLength;
@@ -33,7 +34,7 @@ int main(int argc, char **argv)
 		auto Initial = Alg2(Matrix);
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[0] = EdgeSteep(Matrix, Initial); // Placeholder <- MSLS goes here
+		Chains[0] = msls(Matrix); // Placeholder <- MSLS goes here
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][0] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
@@ -43,7 +44,7 @@ int main(int argc, char **argv)
 		Times[i][1] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[2] = ILSBD.ils(Matrix, Initial); // Placeholder <- ILS2 goes here
+		Chains[2] = ILSBD.ils(Matrix, Initial, 0.13, 1000000); // Placeholder <- ILS2 goes here
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 

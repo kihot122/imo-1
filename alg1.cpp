@@ -13,7 +13,7 @@ std::vector<int> Alg1(std::vector<std::vector<int>> matrix, int startnode)
 
 	std::vector<int> cycle[2];
 
-	srand(time(NULL));
+	srand(time(NULL) + rand());
 	int cycle1Start = startnode == -1 ? rand() % pointsCount : startnode;
 	left[cycle1Start] = false;
 	int cycle2Start = pointsCount;
