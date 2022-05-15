@@ -58,7 +58,6 @@ std::vector<int> Alg1(std::vector<std::vector<int>> matrix, int startnode)
 					continue;
 				}
 
-				// std::cout << matrix[cycle[cycleIndex].back()][j] << '\n' << matrix[cycle[cycleIndex].back()][closestId] << "\n\n";//dev
 				if (matrix[cycle[cycleIndex].back()][j] <= matrix[cycle[cycleIndex].back()][closestId])
 				{
 					closestId = j;

@@ -62,3 +62,15 @@ VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries = 100);
  * @return array of previous, pointed and next value of specified by given index
  **/
 std::array<int, 3> getFromCyclePrevMiddleNext(VCycle &Cycle, int MiddleIndex);
+
+class ILSDestroyRepair
+{
+public:
+    enum class ExchangeType : bool;
+    void edgeSteep(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
+    void nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &Cycles, std::vector<bool> &left, int notAssigned);
+    void destroyRepairPerturbation(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles, float destroyRatio = 0.2);
+    int cyclesLength(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
+public:
+    std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time);
+};
