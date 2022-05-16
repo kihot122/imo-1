@@ -3,32 +3,31 @@
 
 #include "main.hpp"
 
-
 std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS, int iterations)
 {
-    std::vector<int> x;
-    std::vector<int> y;
+	std::vector<int> x;
+	std::vector<int> y;
 
-    x = Alg1(matrix);
+	x = Alg2(matrix);
 
-    auto TimeBefore = std::chrono::high_resolution_clock::now();
-    int c = 0;
-    while (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - TimeBefore).count() <= timeS)
-    {
-        if (c >= iterations)
-        {
-            break;
-        }
+	auto TimeBefore = std::chrono::high_resolution_clock::now();
+	int c = 0;
+	while (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - TimeBefore).count() <= timeS)
+	{
+		if (c >= iterations)
+		{
+			break;
+		}
 
-        y = Alg1(matrix);
+		y = Alg2(matrix);
 
-        if (ChainLength(x, matrix) > ChainLength(y, matrix))
-        {
-            // std::cout << "UPDATE" << "\n";
-            x = y;
-        }
-        c++;
-    }
+		if (ChainLength(x, matrix) > ChainLength(y, matrix))
+		{
+			// std::cout << "UPDATE" << "\n";
+			x = y;
+		}
+		c++;
+	}
 
-    return x;
+	return x;
 }

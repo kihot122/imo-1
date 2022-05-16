@@ -51,7 +51,7 @@ VCycle EdgeSteepVar1(VMat Matrix, VCycle Cycles);
  */
 VCycle EdgeSteepVar2(VMat Matrix, VCycle Cycles, int CandidatesCount = 5);
 
-VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, double time=3600, int Tries = 100);
+VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries = 100);
 
 /**
  * @brief Return adjacent indeses from cycle.
@@ -71,6 +71,7 @@ std::array<int, 3> getFromCyclePrevMiddleNext(VCycle &Cycle, int MiddleIndex);
  **/
 class ILSDestroyRepair
 {
+<<<<<<< HEAD
 private:
     enum class ExchangeType : bool;
     void edgeSteep(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
@@ -89,6 +90,17 @@ public:
      * 
      * */
     std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time=3600, int iterations = 100);
+=======
+  private:
+	enum class ExchangeType : bool;
+	void edgeSteep(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
+	void nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &Cycles, std::vector<bool> &left, int notAssigned);
+	void destroyRepairPerturbation(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles, float destroyRatio = 0.2);
+	int cyclesLength(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
+
+  public:
+	std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time = 3600, int iterations = 100);
+>>>>>>> e734a0dbec57a5e85cc6c2ba03cb007b077e9ea4
 };
 
 std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS = 3600, int iterations = 100);
