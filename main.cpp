@@ -39,20 +39,12 @@ int main(int argc, char **argv)
 		Times[i][0] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-<<<<<<< HEAD
-		Chains[1] = EdgeSteepIteratedVar1(Matrix, Initial, 1.3, 1000000);
-=======
 		Chains[1] = EdgeSteepIteratedVar1(Matrix, Initial, 1000);
->>>>>>> e734a0dbec57a5e85cc6c2ba03cb007b077e9ea4
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][1] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-<<<<<<< HEAD
-		Chains[2] = ILSBD.ils(Matrix, Initial, 1.3, 1000000); 
-=======
 		Chains[2] = ILSBD.ils(Matrix, Initial, 0.4, 1000000); 
->>>>>>> e734a0dbec57a5e85cc6c2ba03cb007b077e9ea4
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
