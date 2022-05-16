@@ -15,7 +15,6 @@ VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries)
 
 	auto Current = EdgeSteep(Matrix, Cycles);
 	auto CurrentLength = ChainLength(Current, Matrix);
-	auto TimeBefore = std::chrono::high_resolution_clock::now();
 	for (int i : std::views::iota(0, Tries))
 	{
 		auto Next = Current;
