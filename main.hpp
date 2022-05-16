@@ -63,17 +63,32 @@ VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries = 100);
  **/
 std::array<int, 3> getFromCyclePrevMiddleNext(VCycle &Cycle, int MiddleIndex);
 
+
+/** ILS with destroy repair perturbation
+ * ILS (Iterated Local Search) for TSP problem.
+ * Operates with perturbation destroy-repair type with 20% ratio to destroy
+ * . 
+ **/
 class ILSDestroyRepair
 {
-  private:
-	enum class ExchangeType : bool;
-	void edgeSteep(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
-	void nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &Cycles, std::vector<bool> &left, int notAssigned);
-	void destroyRepairPerturbation(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles, float destroyRatio = 0.2);
-	int cyclesLength(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
-
-  public:
-	std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time = 3600, int iterations = 100);
+private:
+    enum class ExchangeType : bool;
+    void edgeSteep(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles);
+    void nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles, std::vector<bool> &left, int notAssigned);
+    void destroyRepairPerturbation(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles, float destroyRatio = 0.2);
+    int cyclesLength(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles);
+public:
+    /** Updates given cycles.
+     * @brief Local search for TSP, steep, edges.
+     * 
+     * @param matrix Adjacency matrix
+     * @param cycles Base solution: two cycles same size concatenated in one vector (if vector not odd, first cycle is bigger). 
+     *               Every element occures only once, so each cycle elemnts loop in connection.
+     * @param time Max iterations time
+     * @param iterations Max iteration count
+     * 
+     * */
+    std::vector<int> ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double time=3600, int iterations = 100);
 };
 
 std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS = 3600, int iterations = 100);

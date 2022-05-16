@@ -13,27 +13,27 @@ enum class ILSDestroyRepair::ExchangeType : bool
     CROSS,
 };
 
-void ILSDestroyRepair::edgeSteep(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles)
+void ILSDestroyRepair::edgeSteep(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles)
 {
-    std::array CyclesArr{std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
-	auto &CycleA = CyclesArr[0];
-	auto &CycleB = CyclesArr[1];
+    std::array cyclesArr{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
+	auto &cycleA = cyclesArr[0];
+	auto &cycleB = cyclesArr[1];
 
-	int MinDelta;
+	int minDelta;
 	do
 	{
-		MinDelta = 0;
-		int Delta;
-		int ChoiceA, ChoiceB, CycleIndex;
-		ExchangeType Type;
+		minDelta = 0;
+		int delta;
+		int choiceA, choiceB, cycleIndex;
+		ExchangeType type;
 
-		for (int i = 0; auto &&Cycle : CyclesArr)
+		for (int i = 0; auto &&cycle : cyclesArr)
 		{
-			for (int A = 0; A < Cycle.size(); A++)
+			for (int A = 0; A < cycle.size(); A++)
 			{
-				for (int B = A + 1; B < Cycle.size(); B++)
+				for (int B = A + 1; B < cycle.size(); B++)
 				{
-					int Size = static_cast<int>(Cycle.size());
+					int Size = static_cast<int>(cycle.size());
 
 					int AMin = A - 1 < 0 ? Size - 1 : A - 1;
 					int BMin = B - 1 < 0 ? Size - 1 : B - 1;
@@ -42,77 +42,77 @@ void ILSDestroyRepair::edgeSteep(std::vector<std::vector<int>> &Matrix, std::vec
 					int BMax = B + 1 == Size ? 0 : B + 1;
 
 					//(A to B) + (A+1 to B+1) - (A to A+1) - (B + B+1)
-					Delta = Matrix[Cycle[A]][Cycle[B]] + Matrix[Cycle[AMax]][Cycle[BMax]] - Matrix[Cycle[A]][Cycle[AMax]] - Matrix[Cycle[B]][Cycle[BMax]];
+					delta = matrix[cycle[A]][cycle[B]] + matrix[cycle[AMax]][cycle[BMax]] - matrix[cycle[A]][cycle[AMax]] - matrix[cycle[B]][cycle[BMax]];
 
-					if (Delta < MinDelta)
+					if (delta < minDelta)
 					{
-						MinDelta = Delta;
-						ChoiceA = A;
-						ChoiceB = B;
-						CycleIndex = i;
-						Type = ExchangeType::LOCAL;
+						minDelta = delta;
+						choiceA = A;
+						choiceB = B;
+						cycleIndex = i;
+						type = ExchangeType::LOCAL;
 					}
 				}
 			}
 			i++;
 		}
 
-		for (int A = 0; A < CycleA.size(); A++)
+		for (int A = 0; A < cycleA.size(); A++)
 		{
-			for (int B = 0; B < CycleB.size(); B++)
+			for (int B = 0; B < cycleB.size(); B++)
 			{
-				int SizeA = static_cast<int>(CycleA.size());
-				int SizeB = static_cast<int>(CycleB.size());
+				int sizeA = static_cast<int>(cycleA.size());
+				int sizeB = static_cast<int>(cycleB.size());
 
-				int AMin = A - 1 < 0 ? SizeA - 1 : A - 1;
-				int BMin = B - 1 < 0 ? SizeB - 1 : B - 1;
+				int AMin = A - 1 < 0 ? sizeA - 1 : A - 1;
+				int BMin = B - 1 < 0 ? sizeB - 1 : B - 1;
 
-				int AMax = A + 1 == SizeA ? 0 : A + 1;
-				int BMax = B + 1 == SizeB ? 0 : B + 1;
+				int AMax = A + 1 == sizeA ? 0 : A + 1;
+				int BMax = B + 1 == sizeB ? 0 : B + 1;
 
 				//(A-1 to B) + (A+1 to B) + (B-1 to A) + (B+1 to A)
 				//- (A-1 to A) - (A+1 to A) - (B-1 to B) - (B+1 to B)
-				Delta = Matrix[CycleA[AMin]][CycleB[B]] + Matrix[CycleA[AMax]][CycleB[B]] + Matrix[CycleB[BMin]][CycleA[A]] + Matrix[CycleB[BMax]][CycleA[A]] - Matrix[CycleA[AMin]][CycleA[A]] - Matrix[CycleA[AMax]][CycleA[A]] -
-						Matrix[CycleB[BMin]][CycleB[B]] - Matrix[CycleB[BMax]][CycleB[B]];
+				delta = matrix[cycleA[AMin]][cycleB[B]] + matrix[cycleA[AMax]][cycleB[B]] + matrix[cycleB[BMin]][cycleA[A]] + matrix[cycleB[BMax]][cycleA[A]] - matrix[cycleA[AMin]][cycleA[A]] - matrix[cycleA[AMax]][cycleA[A]] -
+						matrix[cycleB[BMin]][cycleB[B]] - matrix[cycleB[BMax]][cycleB[B]];
 
-				if (Delta < MinDelta)
+				if (delta < minDelta)
 				{
-					MinDelta = Delta;
-					ChoiceA = A;
-					ChoiceB = B;
-					Type = ExchangeType::CROSS;
+					minDelta = delta;
+					choiceA = A;
+					choiceB = B;
+					type = ExchangeType::CROSS;
 				}
 			}
 		}
 
-		if (MinDelta < 0)
+		if (minDelta < 0)
 		{
-			switch (Type)
+			switch (type)
 			{
 				case ExchangeType::LOCAL:
 				{
-					std::reverse(CyclesArr[CycleIndex].begin() + ChoiceA + 1, CyclesArr[CycleIndex].begin() + ChoiceB + 1);
+					std::reverse(cyclesArr[cycleIndex].begin() + choiceA + 1, cyclesArr[cycleIndex].begin() + choiceB + 1);
 					break;
 				}
 				case ExchangeType::CROSS:
 				{
-					std::swap(CycleA[ChoiceA], CycleB[ChoiceB]);
+					std::swap(cycleA[choiceA], cycleB[choiceB]);
 					break;
 				}
 			}
 		}
 
-	} while (MinDelta < 0);
+	} while (minDelta < 0);
 
-    std::vector<int> Temp = CyclesArr[0];
-	Temp.insert(Temp.end(), CyclesArr[1].begin(), CyclesArr[1].end());
+    std::vector<int> temp = cyclesArr[0];
+	temp.insert(temp.end(), cyclesArr[1].begin(), cyclesArr[1].end());
 
-	Cycles = Temp;
+	cycles = temp;
 }        
 
-void ILSDestroyRepair::nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &Cycles, std::vector<bool> &left, int notAssignedCount)
+void ILSDestroyRepair::nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles, std::vector<bool> &left, int notAssignedCount)
 {
-    std::array cycle{std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
+    std::array cycle{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
     auto &CycleA = cycle[0];
     auto &CycleB = cycle[1];
 
@@ -148,20 +148,20 @@ void ILSDestroyRepair::nearestGreedy(std::vector<std::vector<int>> &matrix, std:
 		assigned++;
 	}
 
-    std::vector<int> Temp = cycle[0];
-	Temp.insert(Temp.end(), cycle[1].begin(), cycle[1].end());
+    std::vector<int> temp = cycle[0];
+	temp.insert(temp.end(), cycle[1].begin(), cycle[1].end());
 
-    Cycles = Temp;
+    cycles = temp;
 }
 
-void ILSDestroyRepair::destroyRepairPerturbation(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles, float deleteRatio)
+void ILSDestroyRepair::destroyRepairPerturbation(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles, float deleteRatio)
 {
-    std::array CyclesArr{std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2), std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end())};
-    auto &CycleA = CyclesArr[0];
-    auto &CycleB = CyclesArr[1];
+    std::array cycleArray{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
+    auto &cycleA = cycleArray[0];
+    auto &cycleB = cycleArray[1];
 
-    int deleteQuantity = (int)(Cycles.size()*deleteRatio);
-    std::vector<bool> left (Cycles.size(), false);
+    int deleteQuantity = (int)(cycles.size()*deleteRatio);
+    std::vector<bool> left (cycles.size(), false);
     int toDeleteIx;
     int toDelete;
 
@@ -172,45 +172,45 @@ void ILSDestroyRepair::destroyRepairPerturbation(std::vector<std::vector<int>> &
 
         if (i%2 == 0)
         {   
-            toDeleteIx = rand()%CycleA.size();
-            toDelete = CycleA[toDeleteIx];
-            CycleA.erase(CycleA.begin()+toDeleteIx);
+            toDeleteIx = rand()%cycleA.size();
+            toDelete = cycleA[toDeleteIx];
+            cycleA.erase(cycleA.begin()+toDeleteIx);
 
         }
         else
         {
-            toDeleteIx = rand()%CycleB.size();
-            toDelete = CycleB[toDeleteIx];
-            CycleB.erase(CycleB.begin()+toDeleteIx);
+            toDeleteIx = rand()%cycleB.size();
+            toDelete = cycleB[toDeleteIx];
+            cycleB.erase(cycleB.begin()+toDeleteIx);
 
         }
 
         left[toDelete] = true;
     }
 
-    std::vector<int> Temp = CyclesArr[0];
-	Temp.insert(Temp.end(), CyclesArr[1].begin(), CyclesArr[1].end());
+    std::vector<int> Temp = cycleArray[0];
+	Temp.insert(Temp.end(), cycleArray[1].begin(), cycleArray[1].end());
 
-	Cycles = Temp;
+	cycles = Temp;
 
-    this->nearestGreedy(Matrix, Cycles, left, deleteQuantity);
+    this->nearestGreedy(matrix, cycles, left, deleteQuantity);
 }
 
-int ILSDestroyRepair::cyclesLength(std::vector<std::vector<int>> &Matrix, std::vector<int> &Cycles)
+int ILSDestroyRepair::cyclesLength(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles)
 {
-    int Length = 0;
+    int length = 0;
 
-	for (std::size_t i = 0; i < Cycles.size() / 2 - 1; i++)
-		Length += Matrix[Cycles[i]][Cycles[i + 1]];
+	for (std::size_t i = 0; i < cycles.size() / 2 - 1; i++)
+		length += matrix[cycles[i]][cycles[i + 1]];
 
-	Length += Matrix[Cycles[Cycles.size() / 2 - 1]][Cycles[0]];
+	length += matrix[cycles[cycles.size() / 2 - 1]][cycles[0]];
 
-	for (std::size_t i = Cycles.size() / 2; i < Cycles.size() - 1; i++)
-		Length += Matrix[Cycles[i]][Cycles[i + 1]];
+	for (std::size_t i = cycles.size() / 2; i < cycles.size() - 1; i++)
+		length += matrix[cycles[i]][cycles[i + 1]];
 
-	Length += Matrix[Cycles[Cycles.size() - 1]][Cycles[Cycles.size() / 2]];
+	length += matrix[cycles[cycles.size() - 1]][cycles[cycles.size() / 2]];
 
-	return Length;
+	return length;
 }
 
 std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double timeS, int iterations)
@@ -220,9 +220,9 @@ std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std
 
     edgeSteep(matrix, x);
 
-    auto TimeBefore = std::chrono::high_resolution_clock::now();
+    auto timeBefore = std::chrono::high_resolution_clock::now();
     int c = 0;
-    while (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - TimeBefore).count() <= timeS)
+    while (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - timeBefore).count() <= timeS)
     {
         if (c >= iterations)
         {
@@ -236,7 +236,6 @@ std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std
 
         if (cyclesLength(matrix, x) > cyclesLength(matrix, y))
         {
-            // std::cout << "UPDATE" << "\n";
             x = y;
         }
         c++;
