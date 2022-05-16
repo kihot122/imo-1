@@ -8,7 +8,7 @@ std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS, int it
 	std::vector<int> x;
 	std::vector<int> y;
 
-	x = EdgeSteep(matrix, RandomChain(matrix, 1));
+	x = EdgeSteep(matrix, Alg2(matrix));
 
 	auto TimeBefore = std::chrono::high_resolution_clock::now();
 	int c = 0;
@@ -19,7 +19,7 @@ std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS, int it
 			break;
 		}
 
-		y = EdgeSteep(matrix, RandomChain(matrix, 1));
+		y = EdgeSteep(matrix, Alg2(matrix));
 
 		if (ChainLength(x, matrix) > ChainLength(y, matrix))
 		{
