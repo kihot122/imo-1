@@ -6,7 +6,7 @@ import math
 import numpy as np
 
 
-for i in range(0, 8):
+for i in range(0, 3):
    plt.cla()
    plt.clf()
    name = 'Chain-'+str(i)
@@ -40,11 +40,11 @@ for i in range(0, 8):
    font = {'family' : 'normal',
          'size'   : 7}
 
-   for i, j in zip(g1[0], g1[1]):
-      plt.text(i, j+0.5, '({}, {})'.format(i, j), font=font)
+   # for i, j in zip(g1[0], g1[1]):
+   #    plt.text(i, j+0.5, '({}, {})'.format(i, j), font=font)
 
-   for i, j in zip(g2[0], g2[1]):
-      plt.text(i, j+0.5, '({}, {})'.format(i, j), font=font)
+   # for i, j in zip(g2[0], g2[1]):
+   #    plt.text(i, j+0.5, '({}, {})'.format(i, j), font=font)
 
 
    plt.savefig(name)
