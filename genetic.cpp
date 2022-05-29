@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <map>
 #include <random>
 #include <ranges>
 #include "main.hpp"
@@ -15,12 +16,33 @@ auto Range(int i, int j)
 
 bool operator==(const VCycle &A, const VCycle &B)
 {
+	std::map<std::tuple<int, int>, int> Edges;
+
 	for (int i : Range(A.size()))
-		if (A[i] != B[i])
+	{
+		const auto &EdgeA = std::tuple{A[i], A[(i + 1) % A.size()]};
+		const auto &EdgeB = std::tuple{B[i], B[(i + 1) % B.size()]};
+
+		if (Edges.contains(EdgeA))
+			Edges[EdgeA]++;
+		else
+			Edges[EdgeA] = 0;
+
+		if (Edges.contains(EdgeB))
+			Edges[EdgeB]++;
+		else
+			Edges[EdgeB] = 0;
+	}
+
+	for (auto &&[Edge, Count] : Edges)
+		if (Count == 0)
 			return false;
 
 	return true;
 }
+
+VCycle operator*(const VCycle &A, const VCycle &B)
+{}
 
 void Perturbate(VCycle &Cycle)
 {
