@@ -132,7 +132,11 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch)
 			for (int &&j : Range(i + 1, CrossPopulationSize))
 			{
 				auto &&New = Population[i].first * Population[j].first;
-				// fix shit on mask vector
+				auto cycleA = std::vector<int>(New.first.begin(), New.first.begin() + New.first.size() / 2);
+				auto cycleB = std::vector<int>(New.first.begin() + New.first.size() / 2, New.first.end());
+				auto maskA = std::vector<bool>(New.second.begin(), New.second.begin() + New.second.size() / 2);
+				auto maskB = std::vector<bool>(New.second.begin() + New.second.size() / 2, New.second.end());
+				steepRepair(Matrix, cycleA, cycleB, maskA, maskB);
 
 				for (int &&k : Range(NewPopulation.size()))
 				{
