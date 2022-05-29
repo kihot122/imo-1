@@ -64,7 +64,7 @@ std::pair<VCycle, std::vector<bool>> operator*(const VCycle &A, const VCycle &B)
 	std::vector<bool> Mask(A.size());
 	for (int &&i : Range(A.size()))
 	{
-		Mask[i] = Edges[{A[i], A[(i + 1) % A.size()]}] ? 0 : 1;
+		Mask[i] = Edges[{A[i], A[(i + 1) % A.size()]}] ? false : true;
 	}
 
 	return {A, Mask};
@@ -102,10 +102,11 @@ void Perturbate(VCycle &Cycle)
 	}
 }
 
-VCycle Genetic(VMat Matrix, int CrossPopulationSize, int Epoch)
+VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch)
 {
 	std::vector<std::pair<VCycle, int>> Population;
 	int PopulationSize = CrossPopulationSize * (CrossPopulationSize - 1) / 2;
+	std::pair<VCycle, int> Best = {VCycle(), 0x0fffffff};
 
 	for (int &&i : Range(PopulationSize))
 	{
@@ -122,6 +123,8 @@ VCycle Genetic(VMat Matrix, int CrossPopulationSize, int Epoch)
 	for (int &&i : Range(Epoch))
 	{
 		std::sort(Population.begin(), Population.end(), [](auto &A, auto &B) { return A.second < B.second; });
+		if (Population.begin()->second < Best.second)
+			Best = *Population.begin();
 
 		std::vector<std::pair<VCycle, int>> NewPopulation;
 		for (int &&i : Range(CrossPopulationSize))
@@ -131,10 +134,19 @@ VCycle Genetic(VMat Matrix, int CrossPopulationSize, int Epoch)
 				auto &&New = Population[i].first * Population[j].first;
 				// fix shit on mask vector
 
+				for (int &&k : Range(NewPopulation.size()))
+				{
+					if (New.first == NewPopulation[k].first)
+						Perturbate(New.first);
+				}
+
+				if (UseSteep)
+					New.first = EdgeSteep(Matrix, New.first);
+
 				NewPopulation.push_back({New.first, -1});
 			}
 		}
 	}
 
-	return {};
+	return Best.first;
 }
