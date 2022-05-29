@@ -136,6 +136,9 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 				auto maskB = std::vector<bool>(New.second.begin() + New.second.size() / 2, New.second.end());
 				steepRepair(Matrix, cycleA, cycleB, maskA, maskB);
 
+				cycleA.insert(cycleA.end(), cycleB.begin(), cycleB.end());
+				New.first = cycleA;
+
 				if (Dist(Engine) < MutationFactor)
 				{
 					Perturbate(New.first);
@@ -144,8 +147,7 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 				if (UseSteep)
 					New.first = EdgeSteep(Matrix, New.first);
 
-				cycleA.insert(cycleA.end(), cycleB.begin(), cycleB.end());
-				NewPopulation.push_back({cycleA, -1});
+				NewPopulation.push_back({New.first, -1});
 			}
 		}
 	}
