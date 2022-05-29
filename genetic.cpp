@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <random>
 #include <ranges>
 #include "main.hpp"
 
@@ -20,8 +22,37 @@ bool operator==(const VCycle &A, const VCycle &B)
 	return true;
 }
 
-void Perturbate()
-{}
+void Perturbate(VCycle &Cycle)
+{
+	static std::random_device Rand;
+	static std::default_random_engine Engine(Rand());
+	static std::uniform_int_distribution Dist(0, 1);
+
+	static auto View = std::views::iota(0, (int)Cycle.size());
+	static auto Range = std::vector<int>(View.begin(), View.end());
+
+	std::shuffle(Range.begin(), Range.end(), Engine);
+	// Exchange 3 vertices
+	// 1 -> 2, 2 -> 3, 3 -> 1
+	if (not Dist(Engine))
+	{
+		auto Temp = Cycle[Range[0]];
+		Cycle[Range[0]] = Cycle[Range[2]];
+		Cycle[Range[2]] = Cycle[Range[1]];
+		Cycle[Range[1]] = Temp;
+	}
+	// But sometimes also 5 vertices
+	// 1 -> 2, 2 -> 3, 3 -> 4, 4 -> 5, 5 -> 1
+	else
+	{
+		auto Temp = Cycle[Range[0]];
+		Cycle[Range[0]] = Cycle[Range[4]];
+		Cycle[Range[4]] = Cycle[Range[3]];
+		Cycle[Range[3]] = Cycle[Range[2]];
+		Cycle[Range[2]] = Cycle[Range[1]];
+		Cycle[Range[1]] = Temp;
+	}
+}
 
 VCycle Genetic(VMat Matrix, int CrossPopulationSize)
 {
@@ -31,11 +62,13 @@ VCycle Genetic(VMat Matrix, int CrossPopulationSize)
 	for (int &&i : Range(PopulationSize))
 	{
 		Population.push_back(EdgeSteep(Matrix, Alg2(Matrix, i % Matrix.size())));
-		const auto &Latest = Population[Population.size() - 1];
+		auto &Latest = Population[Population.size() - 1];
 		for (int &&j : Range(Population.size() - 1))
 		{
 			if (Latest == Population[j])
-			{}
+				Perturbate(Latest);
 		}
 	}
+
+	return {};
 }

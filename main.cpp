@@ -14,8 +14,8 @@ int main(int argc, char **argv)
 	const int ChainNum = 3;
 	const int Tries = 10;
 
-	//auto res = Genetic(Matrix);
-	//auto len = ChainLength(Matrix, res);
+	auto res = Genetic(Matrix);
+	auto len = ChainLength(Matrix, res);
 
 	std::array<std::array<int, ChainNum>, Tries> Results;
 	std::array<std::array<size_t, ChainNum>, Tries> Times;
