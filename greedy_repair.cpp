@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <vector>
 #include <stdlib.h>
 #include <time.h>
 #include <chrono>
