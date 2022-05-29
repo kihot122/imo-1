@@ -29,7 +29,7 @@ int localSectionsSwapDelta(const std::vector<std::vector<int>> &matrix, std::vec
 
 std::array<int, 3> bestLocalSwap(const std::vector<std::vector<int>> &matrix, std::vector<int> &cycle, std::vector<bool> &removed)
 {
-    std::array<int, 3> bestSwap = {0, NULL, NULL};
+    std::array<int, 3> bestSwap = {0, 0, 0};
     int localDelta = 0;
 
     for(int i = 0; i < removed.size(); i++) if(removed[i]) for(int j = i+1; j < removed.size(); j++) if(removed[j])
