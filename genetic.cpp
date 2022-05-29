@@ -127,7 +127,9 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 				Perturbate(Latest);
 		}
 	}
-
+	// int len1 = 0;
+	// int len2 = 0;
+	// int len3 = 0;
 	for (int &&i : Range(Epoch))
 	{
 		std::sort(Population.begin(), Population.end(), [](auto &A, auto &B) { return A.second < B.second; });
@@ -144,11 +146,13 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 				auto cycleB = std::vector<int>(New.first.begin() + New.first.size() / 2, New.first.end());
 				auto maskA = std::vector<bool>(New.second.begin(), New.second.begin() + New.second.size() / 2);
 				auto maskB = std::vector<bool>(New.second.begin() + New.second.size() / 2, New.second.end());
+
+				// len1 = ChainLength(Matrix, New.first);
 				steepRepair(Matrix, cycleA, cycleB, maskA, maskB);
 
 				cycleA.insert(cycleA.end(), cycleB.begin(), cycleB.end());
 				New.first = cycleA;
-
+				// len2 = ChainLength(Matrix, New.first);
 				if (Dist(Engine) < MutationFactor)
 				{
 					Perturbate(New.first);
@@ -156,6 +160,7 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 
 				if (UseSteep)
 					New.first = EdgeSteep(Matrix, New.first);
+				// len3 = ChainLength(Matrix, New.first);
 
 				NewPopulation.push_back({New.first, ChainLength(Matrix, New.first)});
 			}
