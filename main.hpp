@@ -100,4 +100,4 @@ std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS = 3600,
  * @param CrossPopulationSize Best n from population that undergo childbirth
  * @return Best of all generations
  */
-VCycle Genetic(VMat Matrix, int CrossPopulationSize = 20);
+VCycle Genetic(VMat Matrix, int CrossPopulationSize = 20, int Epoch = 10);
