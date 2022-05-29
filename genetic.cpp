@@ -102,8 +102,12 @@ void Perturbate(VCycle &Cycle)
 	}
 }
 
-VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch)
+VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, float MutationFactor)
 {
+	std::random_device Rand;
+	std::default_random_engine Engine(Rand());
+	std::uniform_real_distribution Dist(0.0f, 1.0f);
+
 	std::vector<std::pair<VCycle, int>> Population;
 	int PopulationSize = CrossPopulationSize * (CrossPopulationSize - 1) / 2;
 	std::pair<VCycle, int> Best = {VCycle(), 0x0fffffff};
@@ -111,12 +115,6 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch)
 	for (int &&i : Range(PopulationSize))
 	{
 		Population.push_back({EdgeSteep(Matrix, Alg2(Matrix, i % Matrix.size())), -1});
-		auto &Latest = Population[Population.size() - 1].first;
-		for (int &&j : Range(Population.size() - 1))
-		{
-			if (Latest == Population[j].first)
-				Perturbate(Latest);
-		}
 		Population[i].second = ChainLength(Matrix, Population[i].first);
 	}
 
@@ -138,10 +136,9 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch)
 				auto maskB = std::vector<bool>(New.second.begin() + New.second.size() / 2, New.second.end());
 				steepRepair(Matrix, cycleA, cycleB, maskA, maskB);
 
-				for (int &&k : Range(NewPopulation.size()))
+				if (Dist(Engine) < MutationFactor)
 				{
-					if (New.first == NewPopulation[k].first)
-						Perturbate(New.first);
+					Perturbate(New.first);
 				}
 
 				if (UseSteep)
