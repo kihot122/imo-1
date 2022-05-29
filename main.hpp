@@ -97,9 +97,12 @@ std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS = 3600,
  * @brief Genetic algorithm with egde-intersection operator
  *
  * @param Matrix Adkacency matrix
+ * @param UseSteep Whether to use EdgeSteep local search to improve each generation
  * @param CrossPopulationSize Best n from population that undergo childbirth
+ * @param Epoch Number of epochs
+ * @param MutationFactor How big of a fraction of newly generated population will undergo random mutations
  * @return Best of all generations
  */
-VCycle Genetic(VMat Matrix, bool UseSteep = true, int CrossPopulationSize = 20, int Epoch = 10);
+VCycle Genetic(VMat Matrix, bool UseSteep = true, int CrossPopulationSize = 20, int Epoch = 10, float MutationFactor = 0.1);
 
 void steepRepair(const std::vector<std::vector<int>> &matrix, std::vector<int> &mycleA, std::vector<int> &mycleB, std::vector<bool> &removedA, std::vector<bool> &removedB);
