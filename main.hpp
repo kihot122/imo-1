@@ -101,3 +101,5 @@ std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS = 3600,
  * @return Best of all generations
  */
 VCycle Genetic(VMat Matrix, int CrossPopulationSize = 20, int Epoch = 10);
+
+void steepRepair(const std::vector<std::vector<int>> &matrix, std::vector<int> &mycleA, std::vector<int> &mycleB, std::vector<bool> &removedA, std::vector<bool> &removedB);
