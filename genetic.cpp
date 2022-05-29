@@ -102,7 +102,7 @@ void Perturbate(VCycle &Cycle)
 	}
 }
 
-VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, float MutationFactor)
+VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, float MutationFactor, bool UseRandomChain)
 {
 	std::random_device Rand;
 	std::default_random_engine Engine(Rand());
@@ -114,7 +114,10 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 
 	for (int &&i : Range(PopulationSize))
 	{
-		Population.push_back({EdgeSteep(Matrix, Alg2(Matrix, i % Matrix.size())), -1});
+		if (UseRandomChain)
+			Population.push_back({EdgeSteep(Matrix, RandomChain(Matrix, 1)), -1});
+		else
+			Population.push_back({EdgeSteep(Matrix, Alg2(Matrix, i % Matrix.size())), -1});
 		Population[i].second = ChainLength(Matrix, Population[i].first);
 
 		auto &Latest = Population[Population.size() - 1].first;

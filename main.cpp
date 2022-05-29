@@ -48,12 +48,12 @@ int main(int argc, char **argv)
 		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[3] = Genetic(Matrix, true, 25, 10, 0.1);
+		Chains[3] = Genetic(Matrix, true, 25, 10, 0.1, false);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][3] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[4] = Genetic(Matrix, false, 25, 10, 0.1);
+		Chains[4] = Genetic(Matrix, false, 25, 10, 0.1, false);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][4] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 

@@ -101,8 +101,9 @@ std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS = 3600,
  * @param CrossPopulationSize Best n from population that undergo childbirth
  * @param Epoch Number of epochs
  * @param MutationFactor How big of a fraction of newly generated population will undergo random mutations
+ * @param UseRandomChain Whether to use random chain as initial population, cycle greedy otherwise
  * @return Best of all generations
  */
-VCycle Genetic(VMat Matrix, bool UseSteep = true, int CrossPopulationSize = 20, int Epoch = 10, float MutationFactor = 0.1);
+VCycle Genetic(VMat Matrix, bool UseSteep = true, int CrossPopulationSize = 20, int Epoch = 10, float MutationFactor = 0.1, bool UseRandomChain = false);
 
 void steepRepair(const std::vector<std::vector<int>> &matrix, std::vector<int> &mycleA, std::vector<int> &mycleB, std::vector<bool> &removedA, std::vector<bool> &removedB);
