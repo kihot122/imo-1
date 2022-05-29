@@ -14,6 +14,8 @@ int main(int argc, char **argv)
 	const int ChainNum = 3;
 	const int Tries = 10;
 
+	//auto res = Genetic(Matrix);
+	//auto len = ChainLength(Matrix, res);
 
 	std::array<std::array<int, ChainNum>, Tries> Results;
 	std::array<std::array<size_t, ChainNum>, Tries> Times;
@@ -44,13 +46,13 @@ int main(int argc, char **argv)
 		Times[i][1] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[2] = ILSBD.ils(Matrix, Initial, 0.6, 1000000); 
+		Chains[2] = ILSBD.ils(Matrix, Initial, 0.6, 1000000);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		for (size_t j : std::views::iota(0, ChainNum))
 		{
-			Lengths[j] = ChainLength(Chains[j], Matrix);
+			Lengths[j] = ChainLength(Matrix, Chains[j]);
 			if (Lengths[j] < BestLength[j])
 			{
 				BestLength[j] = Lengths[j];

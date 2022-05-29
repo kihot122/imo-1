@@ -3,7 +3,7 @@
 #include <random>
 #include <vector>
 
-int ChainLength(const std::vector<int> &Cycles, const std::vector<std::vector<int>> &Matrix)
+int ChainLength(const std::vector<std::vector<int>> &Matrix, const std::vector<int> &Cycles)
 {
 	int Length = 0;
 
@@ -33,9 +33,9 @@ std::vector<int> RandomChain(std::vector<std::vector<int>> Matrix, int Tries)
 		std::iota(Chain.begin(), Chain.end(), 0);
 		std::shuffle(Chain.begin(), Chain.end(), Engine);
 
-		if (ChainLength(Chain, Matrix) < BestLength)
+		if (ChainLength(Matrix, Chain) < BestLength)
 		{
-			BestLength = ChainLength(Chain, Matrix);
+			BestLength = ChainLength(Matrix, Chain);
 			BestChain = Chain;
 		}
 	}

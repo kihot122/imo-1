@@ -14,7 +14,7 @@ VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries)
 	auto Range = std::vector<int>(View.begin(), View.end());
 
 	auto Current = EdgeSteep(Matrix, Cycles);
-	auto CurrentLength = ChainLength(Current, Matrix);
+	auto CurrentLength = ChainLength(Matrix, Current);
 	for (int i : std::views::iota(0, Tries))
 	{
 		auto Next = Current;
@@ -41,7 +41,7 @@ VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries)
 		}
 
 		auto Result = EdgeSteep(Matrix, Next);
-		auto ResultLength = ChainLength(Result, Matrix);
+		auto ResultLength = ChainLength(Matrix, Result);
 		if (ResultLength < CurrentLength)
 		{
 			Current = Result;

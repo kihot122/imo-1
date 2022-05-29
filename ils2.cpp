@@ -1,21 +1,21 @@
 #include <algorithm>
 #include <array>
-#include <stdlib.h>
-#include <time.h>
 #include <chrono>
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
 #include "main.hpp"
 
 enum class ILSDestroyRepair::ExchangeType : bool
 {
-    LOCAL,
-    CROSS,
+	LOCAL,
+	CROSS,
 };
 
 void ILSDestroyRepair::edgeSteep(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles)
 {
-    std::array cyclesArr{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
+	std::array cyclesArr{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
 	auto &cycleA = cyclesArr[0];
 	auto &cycleB = cyclesArr[1];
 
@@ -104,18 +104,17 @@ void ILSDestroyRepair::edgeSteep(std::vector<std::vector<int>> &matrix, std::vec
 
 	} while (minDelta < 0);
 
-    std::vector<int> temp = cyclesArr[0];
+	std::vector<int> temp = cyclesArr[0];
 	temp.insert(temp.end(), cyclesArr[1].begin(), cyclesArr[1].end());
 
 	cycles = temp;
-}        
+}
 
 void ILSDestroyRepair::nearestGreedy(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles, std::vector<bool> &left, int notAssignedCount)
 {
-    std::array cycle{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
-    auto &CycleA = cycle[0];
-    auto &CycleB = cycle[1];
-
+	std::array cycle{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
+	auto &CycleA = cycle[0];
+	auto &CycleB = cycle[1];
 
 	int pointsCount = matrix.size();
 	int assigned = pointsCount - notAssignedCount;
@@ -148,57 +147,55 @@ void ILSDestroyRepair::nearestGreedy(std::vector<std::vector<int>> &matrix, std:
 		assigned++;
 	}
 
-    std::vector<int> temp = cycle[0];
+	std::vector<int> temp = cycle[0];
 	temp.insert(temp.end(), cycle[1].begin(), cycle[1].end());
 
-    cycles = temp;
+	cycles = temp;
 }
 
 void ILSDestroyRepair::destroyRepairPerturbation(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles, float deleteRatio)
 {
-    std::array cycleArray{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
-    auto &cycleA = cycleArray[0];
-    auto &cycleB = cycleArray[1];
+	std::array cycleArray{std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2), std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end())};
+	auto &cycleA = cycleArray[0];
+	auto &cycleB = cycleArray[1];
 
-    int deleteQuantity = (int)(cycles.size()*deleteRatio);
-    std::vector<bool> left (cycles.size(), false);
-    int toDeleteIx;
-    int toDelete;
+	int deleteQuantity = (int)(cycles.size() * deleteRatio);
+	std::vector<bool> left(cycles.size(), false);
+	int toDeleteIx;
+	int toDelete;
 
-    srand(time(NULL) + rand());
+	srand(time(NULL) + rand());
 
-    for (int i = 0; i < deleteQuantity; i++)
-    {
+	for (int i = 0; i < deleteQuantity; i++)
+	{
 
-        if (i%2 == 0)
-        {   
-            toDeleteIx = rand()%cycleA.size();
-            toDelete = cycleA[toDeleteIx];
-            cycleA.erase(cycleA.begin()+toDeleteIx);
+		if (i % 2 == 0)
+		{
+			toDeleteIx = rand() % cycleA.size();
+			toDelete = cycleA[toDeleteIx];
+			cycleA.erase(cycleA.begin() + toDeleteIx);
+		}
+		else
+		{
+			toDeleteIx = rand() % cycleB.size();
+			toDelete = cycleB[toDeleteIx];
+			cycleB.erase(cycleB.begin() + toDeleteIx);
+		}
 
-        }
-        else
-        {
-            toDeleteIx = rand()%cycleB.size();
-            toDelete = cycleB[toDeleteIx];
-            cycleB.erase(cycleB.begin()+toDeleteIx);
+		left[toDelete] = true;
+	}
 
-        }
-
-        left[toDelete] = true;
-    }
-
-    std::vector<int> Temp = cycleArray[0];
+	std::vector<int> Temp = cycleArray[0];
 	Temp.insert(Temp.end(), cycleArray[1].begin(), cycleArray[1].end());
 
 	cycles = Temp;
 
-    this->nearestGreedy(matrix, cycles, left, deleteQuantity);
+	this->nearestGreedy(matrix, cycles, left, deleteQuantity);
 }
 
 int ILSDestroyRepair::cyclesLength(std::vector<std::vector<int>> &matrix, std::vector<int> &cycles)
 {
-    int length = 0;
+	int length = 0;
 
 	for (std::size_t i = 0; i < cycles.size() / 2 - 1; i++)
 		length += matrix[cycles[i]][cycles[i + 1]];
@@ -215,35 +212,31 @@ int ILSDestroyRepair::cyclesLength(std::vector<std::vector<int>> &matrix, std::v
 
 std::vector<int> ILSDestroyRepair::ils(std::vector<std::vector<int>> matrix, std::vector<int> cycles, double timeS, int iterations)
 {
-    std::vector<int> x = cycles;
-    std::vector<int> y = cycles;
+	std::vector<int> x = cycles;
+	std::vector<int> y = cycles;
 
-    edgeSteep(matrix, x);
+	edgeSteep(matrix, x);
 
-    auto timeBefore = std::chrono::high_resolution_clock::now();
-    int c = 0;
-    while (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - timeBefore).count() <= timeS)
-    {
-        if (c >= iterations)
-        {
-            break;
-        }
+	auto timeBefore = std::chrono::high_resolution_clock::now();
+	int c = 0;
+	while (std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - timeBefore).count() <= timeS)
+	{
+		if (c >= iterations)
+		{
+			break;
+		}
 
-        y = x;
+		y = x;
 
-        destroyRepairPerturbation(matrix, y);
-        edgeSteep(matrix, y);
+		destroyRepairPerturbation(matrix, y);
+		edgeSteep(matrix, y);
 
-        if (cyclesLength(matrix, x) > cyclesLength(matrix, y))
-        {
-            x = y;
-        }
-        c++;
-    }
+		if (cyclesLength(matrix, x) > cyclesLength(matrix, y))
+		{
+			x = y;
+		}
+		c++;
+	}
 
-    return x;
+	return x;
 }
-
-
-
-

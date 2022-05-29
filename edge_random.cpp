@@ -1,29 +1,24 @@
-#include "main.hpp"
 #include "greedy_helpers.hpp"
+#include "main.hpp"
 
 #include <chrono>
 
-
-
 std::vector<int> EdgeRandom(std::vector<std::vector<int>> Matrix, std::vector<int> cycles, uint64_t timeNs)
 {
-    auto CycleA = std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2);
+	auto CycleA = std::vector<int>(cycles.begin(), cycles.begin() + cycles.size() / 2);
 	auto CycleB = std::vector<int>(cycles.begin() + cycles.size() / 2, cycles.end());
 
-    bool cycleNotOptimalA = true, cycleNotOptimalB = true, cyclesNotOptimal = true;
+	bool cycleNotOptimalA = true, cycleNotOptimalB = true, cyclesNotOptimal = true;
 
-    auto TimeA = std::chrono::high_resolution_clock::now();
+	auto TimeA = std::chrono::high_resolution_clock::now();
 
-    while (std::chrono::duration<size_t, std::nano>(std::chrono::high_resolution_clock::now() - TimeA).count() < timeNs)
-    {
-        cycleNotOptimalA = localCycleRandom(Matrix, CycleA, 1, true);
-        cycleNotOptimalB = localCycleRandom(Matrix, CycleB, 1, true);
-        cyclesNotOptimal = CrossGreedyRandom(Matrix, CycleA, CycleB, 1);
-    }
-    
-    
-    CycleA.insert( CycleA.end(), CycleB.begin(), CycleB.end());
-    return CycleA;
+	while (std::chrono::duration<size_t, std::nano>(std::chrono::high_resolution_clock::now() - TimeA).count() < timeNs)
+	{
+		cycleNotOptimalA = localCycleRandom(Matrix, CycleA, 1, true);
+		cycleNotOptimalB = localCycleRandom(Matrix, CycleB, 1, true);
+		cyclesNotOptimal = CrossGreedyRandom(Matrix, CycleA, CycleB, 1);
+	}
+
+	CycleA.insert(CycleA.end(), CycleB.begin(), CycleB.end());
+	return CycleA;
 }
-
-

@@ -1,11 +1,10 @@
 #include <algorithm>
+#include <iostream>
 #include <set>
 #include <vector>
-#include <iostream>
 #include "main.hpp"
 #include <stdlib.h>
 #include <time.h>
-
 
 int preInCycle(int n, int size)
 {
@@ -57,7 +56,7 @@ enum class ExchangeType2
 std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector<int> Cycles, int candidatesCount)
 {
 	std::vector<std::vector<int>> candidates;
-	candidates.resize(Matrix.size()-1, std::vector<int>(candidatesCount, INT32_MAX));
+	candidates.resize(Matrix.size() - 1, std::vector<int>(candidatesCount, INT32_MAX));
 
 	auto CycleA = std::vector<int>(Cycles.begin(), Cycles.begin() + Cycles.size() / 2);
 	auto CycleB = std::vector<int>(Cycles.begin() + Cycles.size() / 2, Cycles.end());
@@ -69,8 +68,8 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 	int ix;
 	for (int i = 0; i < candidatesCount; i++)
 	{
-		ix = candidates.size()-i-1;
-		candidates[ix].erase(candidates[ix].end()-candidatesCount+1+i,candidates[ix].end());
+		ix = candidates.size() - i - 1;
+		candidates[ix].erase(candidates[ix].end() - candidatesCount + 1 + i, candidates[ix].end());
 	}
 
 	for (int i = 0; i < Matrix.size() - 1; i++)
@@ -112,7 +111,7 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 	{
 		c++;
 		minDelta = 0;
-		locDelta = 0; 
+		locDelta = 0;
 		locDeltaOther = 0;
 
 		for (int i = 0; i < candidates.size(); i++)
@@ -222,7 +221,7 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 				}
 			}
 		}
-		
+
 		// std::cout << minChoiceA << std::endl;
 		// std::cout << minChoiceB << std::endl;
 		// std::cout << minDelta << std::endl;
@@ -232,12 +231,12 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 			{
 				case ExchangeType2::LOCAL_A:
 				{
-					if (minChoiceA > minChoiceB) 
+					if (minChoiceA > minChoiceB)
 					{
 						std::reverse(CycleA.begin() + minChoiceB + 1, CycleA.begin() + minChoiceA + 1);
 						break;
 					}
-						
+
 					std::reverse(CycleA.begin() + minChoiceA + 1, CycleA.begin() + minChoiceB + 1);
 					break;
 				}
@@ -247,8 +246,8 @@ std::vector<int> EdgeSteepVar2(std::vector<std::vector<int>> Matrix, std::vector
 					{
 						std::reverse(CycleB.begin() + minChoiceB + 1, CycleB.begin() + minChoiceA + 1);
 						break;
-					} 
-						
+					}
+
 					std::reverse(CycleB.begin() + minChoiceA + 1, CycleB.begin() + minChoiceB + 1);
 					break;
 				}

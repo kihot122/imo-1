@@ -4,8 +4,6 @@
 #include <tuple>
 #include <vector>
 
-
-
 std::array<int, 3> getFromCyclePrevMiddleNext(std::vector<int> &Cycle, int middleIndex);
 
 int crossDeltaProfit(std::vector<std::vector<int>> &Matrix, std::vector<int> &CycleA, std::vector<int> &CycleB, int swapIndexA, int swapIndexB);
@@ -27,4 +25,3 @@ bool localCycleOptimisation(std::vector<std::vector<int>> &Matrix, std::vector<i
 bool CrossGreedyRandom(std::vector<std::vector<int>> &Matrix, std::vector<int> &CycleA, std::vector<int> &CycleB, int changesCount);
 
 bool localCycleRandom(std::vector<std::vector<int>> &Matrix, std::vector<int> &cycle, int changesCount, bool sections);
-

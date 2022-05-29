@@ -21,7 +21,7 @@ std::vector<int> msls(std::vector<std::vector<int>> matrix, double timeS, int it
 
 		y = EdgeSteep(matrix, Alg2(matrix));
 
-		if (ChainLength(x, matrix) > ChainLength(y, matrix))
+		if (ChainLength(matrix, x) > ChainLength(matrix, y))
 		{
 			// std::cout << "UPDATE" << "\n";
 			x = y;
