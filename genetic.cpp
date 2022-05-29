@@ -157,6 +157,7 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 				NewPopulation.push_back({New.first, ChainLength(Matrix, New.first)});
 			}
 		}
+		Population = NewPopulation;
 	}
 
 	return Best.first;
