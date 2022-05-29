@@ -29,8 +29,8 @@ int localSectionsSwapDelta(const std::vector<std::vector<int>> &matrix, std::vec
 
 std::array<int, 3> bestLocalSwap(const std::vector<std::vector<int>> &matrix, std::vector<int> &cycle, std::vector<bool> &removed)
 {
-    std::array<int, 3> bestSwap = {INT_MAX, 0, 0};
-    int localDelta = INT_MAX;
+    std::array<int, 3> bestSwap = {INT32_MAX, 0, 0};
+    int localDelta = INT32_MAX;
 
     for(int i = 0; i < removed.size(); i++) if(removed[i]) for(int j = i+1; j < removed.size(); j++) if(removed[j])
     {
@@ -59,13 +59,13 @@ void steepRepair(const std::vector<std::vector<int>> &matrix, std::vector<int> &
         std::array<int, 3> swapB = bestLocalSwap(matrix, mycleB, removedB);
         if (swapA[0] < swapB[0])
         {   
-            if (swapA[0] == INT_MAX) break;
+            if (swapA[0] == INT32_MAX) break;
             removedA[swapA[1]] = false;
             removedA[swapA[2]] = false;
             swapLocSections(mycleA, swapA[1], swapA[2]);
         } else
         {
-            if (swapB[0] == INT_MAX) break;
+            if (swapB[0] == INT32_MAX) break;
             removedB[swapB[1]] = false;
             removedB[swapB[2]] = false;
             swapLocSections(mycleB, swapB[1], swapB[2]);
