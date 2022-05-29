@@ -116,6 +116,13 @@ VCycle Genetic(VMat Matrix, bool UseSteep, int CrossPopulationSize, int Epoch, f
 	{
 		Population.push_back({EdgeSteep(Matrix, Alg2(Matrix, i % Matrix.size())), -1});
 		Population[i].second = ChainLength(Matrix, Population[i].first);
+
+		auto &Latest = Population[Population.size() - 1].first;
+		for (int &&j : Range(Population.size() - 1))
+		{
+			if (Latest == Population[j].first)
+				Perturbate(Latest);
+		}
 	}
 
 	for (int &&i : Range(Epoch))
