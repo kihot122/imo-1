@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 {
 	auto Matrix = ReadMat(argc == 2 ? argv[1] : "kroA200.tsp");
 	auto Positions = ReadPos(argc == 2 ? argv[1] : "kroA200.tsp");
-	const int ChainNum = 4;
+	const int ChainNum = 5;
 	const int Tries = 10;
 
 	auto res = Genetic(Matrix);
@@ -54,6 +54,11 @@ int main(int argc, char **argv)
 		Chains[3] = Genetic(Matrix, true, 25, 10, 0.1);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][3] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
+
+		TimeA = std::chrono::high_resolution_clock::now();
+		Chains[4] = Genetic(Matrix, false, 25, 10, 0.1);
+		TimeB = std::chrono::high_resolution_clock::now();
+		Times[i][4] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		for (size_t j : std::views::iota(0, ChainNum))
 		{
