@@ -11,8 +11,8 @@ int main(int argc, char **argv)
 {
 	auto Matrix = ReadMat(argc == 2 ? argv[1] : "kroA200.tsp");
 	auto Positions = ReadPos(argc == 2 ? argv[1] : "kroA200.tsp");
-	const int ChainNum = 5;
-	const int Tries = 10;
+	const int ChainNum = 1;
+	const int Tries = 200;
 
 	std::array<std::array<int, ChainNum>, Tries> Results;
 	std::array<std::array<size_t, ChainNum>, Tries> Times;
@@ -23,39 +23,17 @@ int main(int argc, char **argv)
 	auto TimeA = std::chrono::high_resolution_clock::now();
 	auto TimeB = std::chrono::high_resolution_clock::now();
 
-	ILSDestroyRepair ILSBD = ILSDestroyRepair();
-
 	for (size_t i : std::views::iota(0, Tries))
 	{
+		std::cout << i << std::endl;
+
 		std::array<std::vector<int>, ChainNum> Chains;
 		std::array<int, ChainNum> Lengths;
 
-		auto Initial = Alg2(Matrix);
-
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[0] = msls(Matrix);
+		Chains[0] = Best(Matrix, i, 100, 10);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][0] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
-
-		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[1] = EdgeSteepIteratedVar1(Matrix, Initial, 1500);
-		TimeB = std::chrono::high_resolution_clock::now();
-		Times[i][1] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
-
-		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[2] = ILSBD.ils(Matrix, Initial, 0.6, 1000000);
-		TimeB = std::chrono::high_resolution_clock::now();
-		Times[i][2] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
-
-		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[3] = Genetic(Matrix, true, 25, 10, 0.1, false);
-		TimeB = std::chrono::high_resolution_clock::now();
-		Times[i][3] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
-
-		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[4] = Genetic(Matrix, false, 25, 10, 0.1, false);
-		TimeB = std::chrono::high_resolution_clock::now();
-		Times[i][4] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
 		for (size_t j : std::views::iota(0, ChainNum))
 		{

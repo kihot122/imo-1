@@ -52,6 +52,7 @@ VCycle EdgeSteepVar1(VMat Matrix, VCycle Cycles);
 VCycle EdgeSteepVar2(VMat Matrix, VCycle Cycles, int CandidatesCount = 5);
 
 VCycle EdgeSteepIteratedVar1(VMat Matrix, VCycle Cycles, int Tries = 100);
+VCycle Best(VMat Matrix, int StartNode = -1, int Timeout = 10, int MaxBound = 10);
 
 /**
  * @brief Return adjacent indeses from cycle.

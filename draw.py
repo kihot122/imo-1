@@ -6,7 +6,7 @@ import math
 import numpy as np
 
 
-for i in range(0, 3):
+for i in range(0, 1):
    plt.cla()
    plt.clf()
    name = 'Chain-'+str(i)
