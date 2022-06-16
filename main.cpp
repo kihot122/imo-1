@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 		std::array<int, ChainNum> Lengths;
 
 		TimeA = std::chrono::high_resolution_clock::now();
-		Chains[0] = Best(Matrix, i, 100, 10);
+		Chains[0] = Best(Matrix, i, 1000, 20);
 		TimeB = std::chrono::high_resolution_clock::now();
 		Times[i][0] = std::chrono::duration<size_t, std::nano>(TimeB - TimeA).count();
 
